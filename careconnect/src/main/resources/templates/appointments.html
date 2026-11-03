@@ -1,0 +1,1684 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareConnect | Appointments</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-light: #e6f7f5;
+            --dark: #172b4d;
+            --muted: #8492a6;
+            --sidebar-width: 250px;
+            --bg: #f5f8fc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--dark);
+        }
+
+        /* Sidebar */
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #fff;
+            border-right: 1px solid #edf0f5;
+            padding: 25px 18px;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px;
+            margin-bottom: 40px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .brand h4 {
+            font-size: 19px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .brand span {
+            color: var(--primary);
+        }
+
+        .menu-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #a0aec0;
+            letter-spacing: 1px;
+            padding: 0 12px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 14px;
+            margin-bottom: 7px;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 9px;
+        }
+
+        .sidebar .nav-link i {
+            font-size: 18px;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+        }
+
+        /* Main Content */
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #edf0f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            background: #f5f8fc;
+            border-radius: 9px;
+            padding: 10px 14px;
+            width: 280px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 85%;
+            font-size: 12px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #d8f3ee;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .admin-profile h6 {
+            font-size: 13px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .admin-profile small {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .mobile-toggle {
+            display: none;
+            border: none;
+            background: transparent;
+            font-size: 24px;
+        }
+
+        /* Page */
+
+        .page-content {
+            padding: 30px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Statistics */
+
+        .stat-card {
+            background: white;
+            border: 1px solid #edf0f5;
+            border-radius: 13px;
+            padding: 20px;
+            height: 100%;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .icon-teal {
+            background: #e3f8f4;
+            color: #0d9488;
+        }
+
+        .icon-blue {
+            background: #e8f1ff;
+            color: #4285f4;
+        }
+
+        .icon-orange {
+            background: #fff1e5;
+            color: #f59e0b;
+        }
+
+        .icon-red {
+            background: #feecec;
+            color: #ef4444;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 16px;
+        }
+
+        .stat-value {
+            font-size: 27px;
+            font-weight: 700;
+            margin: 5px 0;
+        }
+
+        /* Appointment Table */
+
+        .table-panel {
+            background: white;
+            border: 1px solid #edf0f5;
+            border-radius: 13px;
+            padding: 24px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .panel-subtitle {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .filter-control {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 12px;
+            background: white;
+            color: #475569;
+            outline: none;
+        }
+
+        .filter-control:focus {
+            border-color: var(--primary);
+        }
+
+        .table {
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background: #f8fafc;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 15px 12px;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            padding: 15px 12px;
+            border-color: #f1f5f9;
+        }
+
+        .patient-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .patient-email {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .doctor-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #e8f1ff;
+            color: #4285f4;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-confirmed {
+            background: #e6f7ee;
+            color: #15803d;
+        }
+
+        .status-pending {
+            background: #fff7e6;
+            color: #ca8a04;
+        }
+
+        .status-cancelled {
+            background: #feecec;
+            color: #dc2626;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .btn-primary-custom {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-primary-custom:hover {
+            background: #0f766e;
+            color: white;
+        }
+
+        .pagination .page-link {
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            font-size: 12px;
+            padding: 8px 12px;
+        }
+
+        .pagination .active .page-link {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 991px) {
+            .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .page-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .search-box {
+                display: none;
+            }
+
+            .admin-profile h6,
+            .admin-profile small {
+                display: none;
+            }
+
+            .page-content {
+                padding: 15px;
+            }
+
+            .table-panel {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="bi bi-heart-pulse-fill"></i>
+        </div>
+
+        <h4>Care<span>Connect</span></h4>
+    </div>
+
+    <div class="menu-title">MAIN MENU</div>
+
+    <nav class="nav flex-column">
+
+        <a href="/" class="nav-link">
+            <i class="bi bi-grid-1x2-fill"></i>
+            Dashboard
+        </a>
+
+        <a href="/appointments" class="nav-link active">
+            <i class="bi bi-calendar-check"></i>
+            Appointments
+        </a>
+
+        <a href="/doctors" class="nav-link">
+            <i class="bi bi-person-badge"></i>
+            Doctors
+        </a>
+
+        <a href="/patients" class="nav-link">
+            <i class="bi bi-people"></i>
+            Patients
+        </a>
+
+        <a href="/admin/reports" class="nav-link">
+            <i class="bi bi-bar-chart-line"></i>
+            Reports
+        </a>
+
+    </nav>
+
+    <div class="menu-title mt-4">SETTINGS</div>
+
+    <nav class="nav flex-column">
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-gear"></i>
+            Settings
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-question-circle"></i>
+            Help & Support
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+        <hr>
+
+        <a href="/logout" class="nav-link text-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </a>
+    </div>
+
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+
+        <div class="d-flex align-items-center gap-3">
+
+            <button class="mobile-toggle" id="sidebarToggle">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div class="search-box">
+                <i class="bi bi-search text-secondary"></i>
+
+                <input type="text"
+                       id="searchInput"
+                       placeholder="Search appointments...">
+            </div>
+
+        </div>
+
+        <div class="admin-profile">
+
+            <button class="btn btn-light position-relative">
+                <i class="bi bi-bell"></i>
+
+                <span class="position-absolute top-0 start-100
+                             translate-middle badge rounded-pill bg-danger">
+                    3
+                </span>
+            </button>
+
+            <div class="admin-avatar">AD</div>
+
+            <div>
+                <h6>Admin User</h6>
+                <small>Administrator</small>
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- Page Content -->
+    <section class="page-content">
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between
+                    align-items-center flex-wrap gap-3 mb-4">
+
+            <div>
+                <h2 class="page-title">Appointments</h2>
+
+                <p class="page-subtitle">
+                    Manage, monitor, and organize patient appointments.
+                </p>
+            </div>
+
+            <button class="btn-primary-custom"
+                    data-bs-toggle="modal"
+                    data-bs-target="#appointmentModal">
+
+                <i class="bi bi-plus-lg me-2"></i>
+                Add Appointment
+
+            </button>
+
+        </div>
+
+        <!-- Statistics -->
+        <div class="row g-4 mb-4">
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon icon-teal">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+
+                    <p class="stat-label">Total Appointments</p>
+
+                    <h3 class="stat-value" id="totalCount">8</h3>
+
+                    <small class="text-secondary">
+                        All appointments
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon icon-blue">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+
+                    <p class="stat-label">Confirmed</p>
+
+                    <h3 class="stat-value" id="confirmedCount">4</h3>
+
+                    <small class="text-secondary">
+                        Confirmed bookings
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon icon-orange">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+
+                    <p class="stat-label">Pending</p>
+
+                    <h3 class="stat-value" id="pendingCount">3</h3>
+
+                    <small class="text-secondary">
+                        Awaiting confirmation
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon icon-red">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <p class="stat-label">Cancelled</p>
+
+                    <h3 class="stat-value" id="cancelledCount">1</h3>
+
+                    <small class="text-secondary">
+                        Cancelled bookings
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Appointment Table -->
+        <div class="table-panel">
+
+            <div class="d-flex justify-content-between
+                        align-items-center flex-wrap gap-3 mb-4">
+
+                <div>
+                    <h5 class="panel-title">
+                        All Appointments
+                    </h5>
+
+                    <p class="panel-subtitle">
+                        View and manage patient bookings
+                    </p>
+                </div>
+
+                <button class="btn btn-light btn-sm"
+                        onclick="exportAppointments()">
+
+                    <i class="bi bi-download me-2"></i>
+                    Export CSV
+
+                </button>
+
+            </div>
+
+            <!-- Filters -->
+            <div class="row g-3 mb-4">
+
+                <div class="col-lg-4 col-md-6">
+
+                    <div class="input-group">
+
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-search text-secondary"></i>
+                        </span>
+
+                        <input type="text"
+                               class="form-control filter-control"
+                               id="tableSearch"
+                               placeholder="Search patient, doctor, ID...">
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+
+                    <input type="date"
+                           class="form-control filter-control"
+                           id="dateFilter">
+
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+
+                    <select class="form-select filter-control"
+                            id="statusFilter">
+
+                        <option value="all">All Status</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Cancelled">Cancelled</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+
+                    <button class="btn btn-light w-100"
+                            onclick="resetFilters()">
+
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>
+                        Reset
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+
+                <table class="table" id="appointmentTable">
+
+                    <thead>
+                        <tr>
+                            <th>APPOINTMENT ID</th>
+                            <th>PATIENT</th>
+                            <th>DOCTOR</th>
+                            <th>DATE</th>
+                            <th>TIME</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="appointmentBody">
+                    </tbody>
+
+                </table>
+
+                <div id="noResults"
+                     class="text-center py-4 text-secondary d-none">
+
+                    <i class="bi bi-calendar-x fs-3"></i>
+
+                    <p class="mt-2 mb-0">
+                        No appointments found.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between
+                        align-items-center flex-wrap gap-3 mt-3">
+
+                <small class="text-secondary" id="pageInfo">
+                    Showing 1 to 8 of 8 appointments
+                </small>
+
+                <nav>
+                    <ul class="pagination mb-0"
+                        id="pagination">
+                    </ul>
+                </nav>
+
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-4 py-3">
+
+            <small class="text-secondary">
+                © 2026 CareConnect | Healthcare Appointment Management
+            </small>
+
+        </footer>
+
+    </section>
+
+</main>
+
+<!-- Appointment Modal -->
+<div class="modal fade" id="appointmentModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="modalTitle">
+                    Appointment Details
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="appointmentForm">
+
+                    <input type="hidden" id="appointmentId">
+
+                    <div class="mb-3">
+                        <label class="form-label">Patient Name</label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="patientName"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Patient Email</label>
+
+                        <input type="email"
+                               class="form-control"
+                               id="patientEmail"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Doctor Name</label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="doctorName"
+                               required>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">Date</label>
+
+                            <input type="date"
+                                   class="form-control"
+                                   id="appointmentDate"
+                                   required>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">Time</label>
+
+                            <input type="time"
+                                   class="form-control"
+                                   id="appointmentTime"
+                                   required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">Status</label>
+
+                        <select class="form-select"
+                                id="appointmentStatus">
+
+                            <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Cancelled">Cancelled</option>
+
+                        </select>
+
+                    </div>
+
+                    <button type="submit"
+                            class="btn-primary-custom w-100">
+
+                        Save Appointment
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Confirm Action
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body" id="confirmMessage">
+                Are you sure?
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-light"
+                        data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+                <button class="btn btn-danger"
+                        id="confirmAction">
+
+                    Confirm
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    // Sample appointment data
+
+    let appointments = [
+        {
+            id: "APT001",
+            patient: "Rahul Kumar",
+            email: "rahul@gmail.com",
+            doctor: "Dr. Rajesh Kumar",
+            date: "2026-11-03",
+            time: "09:30",
+            status: "Confirmed"
+        },
+        {
+            id: "APT002",
+            patient: "Anjali Menon",
+            email: "anjali@gmail.com",
+            doctor: "Dr. Sneha Menon",
+            date: "2026-11-03",
+            time: "10:00",
+            status: "Pending"
+        },
+        {
+            id: "APT003",
+            patient: "Arjun Nair",
+            email: "arjun@gmail.com",
+            doctor: "Dr. Meera Nair",
+            date: "2026-11-03",
+            time: "11:30",
+            status: "Confirmed"
+        },
+        {
+            id: "APT004",
+            patient: "Priya Thomas",
+            email: "priya@gmail.com",
+            doctor: "Dr. Kiran",
+            date: "2026-11-03",
+            time: "14:00",
+            status: "Cancelled"
+        },
+        {
+            id: "APT005",
+            patient: "Neha Joseph",
+            email: "neha@gmail.com",
+            doctor: "Dr. Rajesh Kumar",
+            date: "2026-11-04",
+            time: "09:00",
+            status: "Confirmed"
+        },
+        {
+            id: "APT006",
+            patient: "Akhil Varma",
+            email: "akhil@gmail.com",
+            doctor: "Dr. Sneha Menon",
+            date: "2026-11-04",
+            time: "10:30",
+            status: "Pending"
+        },
+        {
+            id: "APT007",
+            patient: "Diya Thomas",
+            email: "diya@gmail.com",
+            doctor: "Dr. Meera Nair",
+            date: "2026-11-05",
+            time: "12:00",
+            status: "Confirmed"
+        },
+        {
+            id: "APT008",
+            patient: "Vishnu Raj",
+            email: "vishnu@gmail.com",
+            doctor: "Dr. Kiran",
+            date: "2026-11-05",
+            time: "15:00",
+            status: "Pending"
+        }
+    ];
+
+
+    // Pagination
+
+    let currentPage = 1;
+
+    const rowsPerPage = 5;
+
+    let filteredAppointments = [...appointments];
+
+
+    // Sidebar
+
+    document.getElementById("sidebarToggle")
+        .addEventListener("click", function () {
+
+            document.getElementById("sidebar")
+                .classList.toggle("show");
+
+        });
+
+
+    // Update Statistics
+
+    function updateStatistics() {
+
+        document.getElementById("totalCount")
+            .innerText = appointments.length;
+
+        document.getElementById("confirmedCount")
+            .innerText = appointments.filter(
+                a => a.status === "Confirmed"
+            ).length;
+
+        document.getElementById("pendingCount")
+            .innerText = appointments.filter(
+                a => a.status === "Pending"
+            ).length;
+
+        document.getElementById("cancelledCount")
+            .innerText = appointments.filter(
+                a => a.status === "Cancelled"
+            ).length;
+
+    }
+
+
+    // Format Date
+
+    function formatDate(date) {
+
+        return new Date(date + "T00:00:00")
+            .toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            });
+
+    }
+
+
+    // Format Time
+
+    function formatTime(time) {
+
+        const [hours, minutes] = time.split(":");
+
+        const date = new Date();
+
+        date.setHours(hours, minutes);
+
+        return date.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        });
+
+    }
+
+
+    // Status Badge
+
+    function statusBadge(status) {
+
+        const classes = {
+            Confirmed: "status-confirmed",
+            Pending: "status-pending",
+            Cancelled: "status-cancelled"
+        };
+
+        return `
+            <span class="status ${classes[status]}">
+                ${status}
+            </span>
+        `;
+
+    }
+
+
+    // Render Appointments
+
+    function renderAppointments() {
+
+        const tbody = document.getElementById("appointmentBody");
+
+        tbody.innerHTML = "";
+
+        const start = (currentPage - 1) * rowsPerPage;
+
+        const end = start + rowsPerPage;
+
+        const pageAppointments = filteredAppointments.slice(start, end);
+
+        pageAppointments.forEach(appointment => {
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>
+                    <strong>#${appointment.id}</strong>
+                </td>
+
+                <td>
+                    <div class="patient-name">
+                        ${appointment.patient}
+                    </div>
+
+                    <div class="patient-email">
+                        ${appointment.email}
+                    </div>
+                </td>
+
+                <td>
+                    <span class="doctor-avatar">
+                        ${appointment.doctor.substring(4, 6).toUpperCase()}
+                    </span>
+
+                    ${appointment.doctor}
+                </td>
+
+                <td>${formatDate(appointment.date)}</td>
+
+                <td>${formatTime(appointment.time)}</td>
+
+                <td>${statusBadge(appointment.status)}</td>
+
+                <td>
+                    <div class="d-flex gap-2">
+
+                        <button class="action-btn"
+                                title="View"
+                                onclick="viewAppointment('${appointment.id}')">
+
+                            <i class="bi bi-eye"></i>
+
+                        </button>
+
+                        <button class="action-btn"
+                                title="Edit"
+                                onclick="editAppointment('${appointment.id}')">
+
+                            <i class="bi bi-pencil"></i>
+
+                        </button>
+
+                        <button class="action-btn"
+                                title="Delete"
+                                onclick="deleteAppointment('${appointment.id}')">
+
+                            <i class="bi bi-trash"></i>
+
+                        </button>
+
+                    </div>
+                </td>
+            `;
+
+            tbody.appendChild(row);
+
+        });
+
+        document.getElementById("noResults")
+            .classList.toggle(
+                "d-none",
+                filteredAppointments.length !== 0
+            );
+
+        document.getElementById("appointmentTable")
+            .classList.toggle(
+                "d-none",
+                filteredAppointments.length === 0
+            );
+
+        updatePagination();
+
+    }
+
+
+    // Filtering
+
+    function filterAppointments() {
+
+        const search = document
+            .getElementById("tableSearch")
+            .value.toLowerCase();
+
+        const date = document
+            .getElementById("dateFilter")
+            .value;
+
+        const status = document
+            .getElementById("statusFilter")
+            .value;
+
+        filteredAppointments = appointments.filter(a => {
+
+            const matchesSearch =
+                a.id.toLowerCase().includes(search) ||
+                a.patient.toLowerCase().includes(search) ||
+                a.doctor.toLowerCase().includes(search) ||
+                a.email.toLowerCase().includes(search);
+
+            const matchesDate =
+                !date || a.date === date;
+
+            const matchesStatus =
+                status === "all" || a.status === status;
+
+            return matchesSearch &&
+                   matchesDate &&
+                   matchesStatus;
+
+        });
+
+        currentPage = 1;
+
+        renderAppointments();
+
+    }
+
+
+    document.getElementById("tableSearch")
+        .addEventListener("input", filterAppointments);
+
+    document.getElementById("dateFilter")
+        .addEventListener("change", filterAppointments);
+
+    document.getElementById("statusFilter")
+        .addEventListener("change", filterAppointments);
+
+
+    // Reset Filters
+
+    function resetFilters() {
+
+        document.getElementById("tableSearch").value = "";
+
+        document.getElementById("dateFilter").value = "";
+
+        document.getElementById("statusFilter").value = "all";
+
+        filterAppointments();
+
+    }
+
+
+    // Pagination
+
+    function updatePagination() {
+
+        const totalPages = Math.ceil(
+            filteredAppointments.length / rowsPerPage
+        );
+
+        const pagination = document.getElementById("pagination");
+
+        pagination.innerHTML = "";
+
+        function addPage(label, page, disabled = false, active = false) {
+
+            const li = document.createElement("li");
+
+            li.className =
+                "page-item" +
+                (disabled ? " disabled" : "") +
+                (active ? " active" : "");
+
+            const link = document.createElement("a");
+
+            link.className = "page-link";
+
+            link.href = "#";
+
+            link.innerText = label;
+
+            link.addEventListener("click", function (event) {
+
+                event.preventDefault();
+
+                if (disabled) return;
+
+                currentPage = page;
+
+                renderAppointments();
+
+            });
+
+            li.appendChild(link);
+
+            pagination.appendChild(li);
+
+        }
+
+        addPage(
+            "Previous",
+            currentPage - 1,
+            currentPage === 1
+        );
+
+        for (let i = 1; i <= totalPages; i++) {
+
+            addPage(
+                i,
+                i,
+                false,
+                i === currentPage
+            );
+
+        }
+
+        addPage(
+            "Next",
+            currentPage + 1,
+            currentPage === totalPages || totalPages === 0
+        );
+
+        const total = filteredAppointments.length;
+
+        const from = total === 0
+            ? 0
+            : (currentPage - 1) * rowsPerPage + 1;
+
+        const to = Math.min(
+            currentPage * rowsPerPage,
+            total
+        );
+
+        document.getElementById("pageInfo").innerText =
+            `Showing ${from} to ${to} of ${total} appointments`;
+
+    }
+
+
+    // View Appointment
+
+    function viewAppointment(id) {
+
+        const appointment = appointments.find(a => a.id === id);
+
+        if (!appointment) return;
+
+        document.getElementById("modalTitle").innerText =
+            "Appointment Details";
+
+        document.getElementById("appointmentId").value =
+            appointment.id;
+
+        document.getElementById("patientName").value =
+            appointment.patient;
+
+        document.getElementById("patientEmail").value =
+            appointment.email;
+
+        document.getElementById("doctorName").value =
+            appointment.doctor;
+
+        document.getElementById("appointmentDate").value =
+            appointment.date;
+
+        document.getElementById("appointmentTime").value =
+            appointment.time;
+
+        document.getElementById("appointmentStatus").value =
+            appointment.status;
+
+        document.getElementById("appointmentForm")
+            .querySelectorAll("input, select")
+            .forEach(input => input.disabled = true);
+
+        const modal = new bootstrap.Modal(
+            document.getElementById("appointmentModal")
+        );
+
+        modal.show();
+
+    }
+
+
+    // Add Appointment
+
+    document.querySelector('[data-bs-target="#appointmentModal"]')
+        .addEventListener("click", function () {
+
+            document.getElementById("modalTitle").innerText =
+                "Add Appointment";
+
+            document.getElementById("appointmentForm").reset();
+
+            document.getElementById("appointmentId").value = "";
+
+            document.getElementById("appointmentForm")
+                .querySelectorAll("input, select")
+                .forEach(input => input.disabled = false);
+
+        });
+
+
+    // Edit Appointment
+
+    function editAppointment(id) {
+
+        const appointment = appointments.find(a => a.id === id);
+
+        if (!appointment) return;
+
+        document.getElementById("modalTitle").innerText =
+            "Edit Appointment";
+
+        document.getElementById("appointmentId").value =
+            appointment.id;
+
+        document.getElementById("patientName").value =
+            appointment.patient;
+
+        document.getElementById("patientEmail").value =
+            appointment.email;
+
+        document.getElementById("doctorName").value =
+            appointment.doctor;
+
+        document.getElementById("appointmentDate").value =
+            appointment.date;
+
+        document.getElementById("appointmentTime").value =
+            appointment.time;
+
+        document.getElementById("appointmentStatus").value =
+            appointment.status;
+
+        document.getElementById("appointmentForm")
+            .querySelectorAll("input, select")
+            .forEach(input => input.disabled = false);
+
+        new bootstrap.Modal(
+            document.getElementById("appointmentModal")
+        ).show();
+
+    }
+
+
+    // Save Appointment
+
+    document.getElementById("appointmentForm")
+        .addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            const id = document.getElementById("appointmentId").value;
+
+            const appointment = {
+
+                id: id || "APT" + String(
+                    Date.now()
+                ).slice(-6),
+
+                patient: document.getElementById("patientName").value,
+
+                email: document.getElementById("patientEmail").value,
+
+                doctor: document.getElementById("doctorName").value,
+
+                date: document.getElementById("appointmentDate").value,
+
+                time: document.getElementById("appointmentTime").value,
+
+                status: document.getElementById("appointmentStatus").value
+
+            };
+
+            if (id) {
+
+                const index = appointments.findIndex(a => a.id === id);
+
+                appointments[index] = appointment;
+
+            } else {
+
+                appointments.push(appointment);
+
+            }
+
+            bootstrap.Modal.getInstance(
+                document.getElementById("appointmentModal")
+            ).hide();
+
+            updateStatistics();
+
+            filterAppointments();
+
+        });
+
+
+    // Confirm / Cancel Appointment
+
+    function changeStatus(id, status) {
+
+        const appointment = appointments.find(a => a.id === id);
+
+        if (!appointment) return;
+
+        appointment.status = status;
+
+        updateStatistics();
+
+        filterAppointments();
+
+    }
+
+
+    // Delete Appointment
+
+    let pendingDeleteId = null;
+
+    function deleteAppointment(id) {
+
+        pendingDeleteId = id;
+
+        document.getElementById("confirmMessage").innerText =
+            "Are you sure you want to delete this appointment?";
+
+        document.getElementById("confirmAction").onclick = function () {
+
+            appointments = appointments.filter(
+                a => a.id !== pendingDeleteId
+            );
+
+            bootstrap.Modal.getInstance(
+                document.getElementById("confirmModal")
+            ).hide();
+
+            updateStatistics();
+
+            filterAppointments();
+
+        };
+
+        new bootstrap.Modal(
+            document.getElementById("confirmModal")
+        ).show();
+
+    }
+
+
+    // Export CSV
+
+    function exportAppointments() {
+
+        const headers = [
+            "Appointment ID",
+            "Patient",
+            "Email",
+            "Doctor",
+            "Date",
+            "Time",
+            "Status"
+        ];
+
+        const rows = filteredAppointments.map(a => [
+            a.id,
+            a.patient,
+            a.email,
+            a.doctor,
+            a.date,
+            a.time,
+            a.status
+        ]);
+
+        const csv = [headers, ...rows]
+            .map(row => row.map(value =>
+                '"' + String(value).replace(/"/g, '""') + '"'
+            ).join(","))
+            .join("\n");
+
+        const blob = new Blob(
+            ["\uFEFF" + csv],
+            { type: "text/csv;charset=utf-8;" }
+        );
+
+        const link = document.createElement("a");
+
+        link.href = URL.createObjectURL(blob);
+
+        link.download = "careconnect-appointments.csv";
+
+        link.click();
+
+        URL.revokeObjectURL(link.href);
+
+    }
+
+
+    // Initial Load
+
+    updateStatistics();
+
+    filterAppointments();
+
+</script>
+
+</body>
+</html>

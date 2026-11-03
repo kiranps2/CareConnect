@@ -1,0 +1,1654 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareConnect | Admin Dashboard</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-light: #e6f7f5;
+            --dark: #172b4d;
+            --muted: #8492a6;
+            --sidebar-width: 250px;
+            --bg: #f5f8fc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--dark);
+        }
+
+        /* Sidebar */
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #ffffff;
+            border-right: 1px solid #edf0f5;
+            padding: 25px 18px;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px;
+            margin-bottom: 40px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .brand h4 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .brand span {
+            color: var(--primary);
+        }
+
+        .menu-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #a0aec0;
+            letter-spacing: 1px;
+            padding: 0 12px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 14px;
+            margin-bottom: 7px;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 9px;
+            transition: 0.2s;
+        }
+
+        .sidebar .nav-link i {
+            font-size: 18px;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+        }
+
+        /* Main Content */
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: 0.3s;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #edf0f5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-box {
+            background: #f5f8fc;
+            border-radius: 9px;
+            padding: 10px 14px;
+            width: 280px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 85%;
+            font-size: 12px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #d8f3ee;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .admin-profile h6 {
+            font-size: 13px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .admin-profile small {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* Dashboard */
+
+        .dashboard-content {
+            padding: 30px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #edf0f5;
+            border-radius: 13px;
+            padding: 22px;
+            height: 100%;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30, 60, 90, 0.05);
+        }
+
+        .stat-icon {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 21px;
+        }
+
+        .icon-teal {
+            background: #e3f8f4;
+            color: #0d9488;
+        }
+
+        .icon-blue {
+            background: #e8f1ff;
+            color: #4285f4;
+        }
+
+        .icon-purple {
+            background: #f0eaff;
+            color: #8b5cf6;
+        }
+
+        .icon-orange {
+            background: #fff1e5;
+            color: #f59e0b;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 18px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 5px 0 10px;
+        }
+
+        .stat-footer {
+            font-size: 11px;
+            color: #16a34a;
+        }
+
+        .stat-footer span {
+            color: var(--muted);
+        }
+
+        /* Panels */
+
+        .panel {
+            background: white;
+            border: 1px solid #edf0f5;
+            border-radius: 13px;
+            padding: 24px;
+            height: 100%;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .panel-subtitle {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .table {
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 600;
+            background: #f8fafc;
+            padding: 14px 12px;
+            border-bottom: none;
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            padding: 15px 12px;
+            border-color: #f1f5f9;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .patient-email {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-confirmed {
+            background: #e6f7ee;
+            color: #15803d;
+        }
+
+        .status-pending {
+            background: #fff7e6;
+            color: #ca8a04;
+        }
+
+        .status-cancelled {
+            background: #feecec;
+            color: #dc2626;
+        }
+
+        .doctor-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8f1ff;
+            color: #4285f4;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .appointment-filter {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 12px;
+            outline: none;
+        }
+
+        /* Chart */
+
+        .chart-container {
+            position: relative;
+            height: 270px;
+        }
+
+        /* Mobile */
+
+        .mobile-toggle {
+            display: none;
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            color: var(--dark);
+        }
+
+        @media (max-width: 991px) {
+            .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .dashboard-content {
+                padding: 20px;
+            }
+
+            .topbar {
+                padding: 15px 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .search-box {
+                display: none;
+            }
+
+            .admin-profile h6,
+            .admin-profile small {
+                display: none;
+            }
+
+            .dashboard-content {
+                padding: 15px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="bi bi-heart-pulse-fill"></i>
+        </div>
+        <h4>Care<span>Connect</span></h4>
+    </div>
+
+    <div class="menu-title">MAIN MENU</div>
+
+    <nav class="nav flex-column">
+
+        <a href="#" class="nav-link active">
+            <i class="bi bi-grid-1x2-fill"></i>
+            Dashboard
+        </a>
+
+        <a href="/appointments" class="nav-link">
+            <i class="bi bi-calendar-check"></i>
+            Appointments
+        </a>
+
+        <a href="/doctors" class="nav-link">
+            <i class="bi bi-person-badge"></i>
+            Doctors
+        </a>
+
+        <a href="/patients" class="nav-link">
+            <i class="bi bi-people"></i>
+            Patients
+        </a>
+
+        <a href="/reports" class="nav-link">
+            <i class="bi bi-bar-chart-line"></i>
+            Reports
+        </a>
+
+    </nav>
+
+    <div class="menu-title mt-4">SETTINGS</div>
+
+    <nav class="nav flex-column">
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-gear"></i>
+            Settings
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="bi bi-question-circle"></i>
+            Help & Support
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+        <hr>
+
+        <a href="#" class="nav-link text-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </a>
+    </div>
+
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+
+        <div class="d-flex align-items-center gap-3">
+
+            <button class="mobile-toggle" id="sidebarToggle">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div class="search-box">
+                <i class="bi bi-search text-secondary"></i>
+                <input type="text"
+                       id="globalSearch"
+                       placeholder="Search patients, doctors...">
+            </div>
+
+        </div>
+
+        <div class="admin-profile">
+
+            <button class="btn btn-light position-relative">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-100
+                             translate-middle badge rounded-pill bg-danger">
+                    3
+                </span>
+            </button>
+
+            <div class="admin-avatar">AD</div>
+
+            <div>
+                <h6>Admin User</h6>
+                <small>Administrator</small>
+            </div>
+
+            <i class="bi bi-chevron-down text-secondary"></i>
+
+        </div>
+
+    </header>
+
+    <!-- Dashboard -->
+    <section class="dashboard-content">
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center
+                    flex-wrap gap-3 mb-4">
+
+            <div>
+                <h2 class="page-title">Dashboard Overview</h2>
+                <p class="page-subtitle">
+                    Welcome back! Here's what's happening at CareConnect.
+                </p>
+            </div>
+
+            <button class="btn btn-success"
+                    style="background: var(--primary); border: none;"
+                    onclick="window.location.href='#appointments'">
+
+                <i class="bi bi-plus-lg me-2"></i>
+                New Appointment
+
+            </button>
+
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row g-4 mb-4">
+
+            <!-- Total Appointments -->
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="d-flex justify-content-between">
+                        <div class="stat-icon icon-teal">
+                            <i class="bi bi-calendar2-check"></i>
+                        </div>
+
+                        <span class="badge bg-light text-success">
+                            +12.5%
+                        </span>
+                    </div>
+
+                    <p class="stat-label">Total Appointments</p>
+                    <h3 class="stat-value" id="totalAppointments">1,248</h3>
+
+                    <div class="stat-footer">
+                        <i class="bi bi-arrow-up"></i>
+                        12.5% <span>from last month</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Today's Appointments -->
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="d-flex justify-content-between">
+                        <div class="stat-icon icon-blue">
+                            <i class="bi bi-calendar-day"></i>
+                        </div>
+
+                        <span class="badge bg-light text-primary">
+                            Today
+                        </span>
+                    </div>
+
+                    <p class="stat-label">Today's Appointments</p>
+                    <h3 class="stat-value" id="todayAppointments">36</h3>
+
+                    <div class="stat-footer">
+                        <i class="bi bi-arrow-up"></i>
+                        8.2% <span>from yesterday</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Doctors -->
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="d-flex justify-content-between">
+                        <div class="stat-icon icon-purple">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+
+                        <span class="badge bg-light text-success">
+                            Active
+                        </span>
+                    </div>
+
+                    <p class="stat-label">Total Doctors</p>
+                    <h3 class="stat-value">48</h3>
+
+                    <div class="stat-footer">
+                        <i class="bi bi-check-circle"></i>
+                        42 <span>available today</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Patients -->
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="d-flex justify-content-between">
+                        <div class="stat-icon icon-orange">
+                            <i class="bi bi-people"></i>
+                        </div>
+
+                        <span class="badge bg-light text-success">
+                            +18%
+                        </span>
+                    </div>
+
+                    <p class="stat-label">Registered Patients</p>
+                    <h3 class="stat-value">2,856</h3>
+
+                    <div class="stat-footer">
+                        <i class="bi bi-arrow-up"></i>
+                        18% <span>from last month</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row g-4 mb-4">
+
+            <!-- Appointment Chart -->
+            <div class="col-lg-8">
+
+                <div class="panel">
+
+                    <div class="d-flex justify-content-between
+                                align-items-center mb-4">
+
+                        <div>
+                            <h5 class="panel-title">
+                                Appointment Overview
+                            </h5>
+                            <p class="panel-subtitle">
+                                Monthly appointment statistics
+                            </p>
+                        </div>
+
+                        <select class="appointment-filter"
+                                id="chartFilter">
+
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly" selected>Monthly</option>
+                            <option value="yearly">Yearly</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="appointmentChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Appointment Status -->
+            <div class="col-lg-4">
+
+                <div class="panel">
+
+                    <h5 class="panel-title">Appointment Status</h5>
+
+                    <p class="panel-subtitle mb-4">
+                        Appointment distribution
+                    </p>
+
+                    <div class="chart-container"
+                         style="height:220px;">
+
+                        <canvas id="statusChart"></canvas>
+
+                    </div>
+
+                    <div class="mt-4">
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="panel-subtitle">
+                                <i class="bi bi-circle-fill text-success me-2"></i>
+                                Confirmed
+                            </span>
+                            <strong>65%</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="panel-subtitle">
+                                <i class="bi bi-circle-fill text-warning me-2"></i>
+                                Pending
+                            </span>
+                            <strong>25%</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <span class="panel-subtitle">
+                                <i class="bi bi-circle-fill text-danger me-2"></i>
+                                Cancelled
+                            </span>
+                            <strong>10%</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Today's Appointments -->
+        <div class="panel mb-4" id="appointments">
+
+            <div class="d-flex justify-content-between
+                        align-items-center flex-wrap gap-3 mb-4">
+
+                <div>
+                    <h5 class="panel-title">
+                        Today's Appointments
+                    </h5>
+
+                    <p class="panel-subtitle">
+                        Manage and monitor today's bookings
+                    </p>
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+
+                    <input type="date"
+                           class="appointment-filter"
+                           id="dateFilter">
+
+                    <select class="appointment-filter"
+                            id="statusFilter">
+
+                        <option value="all">All Status</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Cancelled">Cancelled</option>
+
+                    </select>
+
+                    <a href="/appointments" class="view-all align-self-center">
+                        View All
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table" id="appointmentTable">
+
+                    <thead>
+                        <tr>
+                            <th>APPOINTMENT ID</th>
+                            <th>PATIENT</th>
+                            <th>DOCTOR</th>
+                            <th>DATE</th>
+                            <th>TIME</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr data-date="2026-11-03"
+                            data-status="Confirmed">
+
+                            <td>#APT001</td>
+
+                            <td>
+                                <div class="patient-name">
+                                    Rahul Kumar
+                                </div>
+                                <div class="patient-email">
+                                    rahul@gmail.com
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="doctor-avatar">DR</span>
+                                Dr. Rajesh
+                            </td>
+
+                            <td>03 Nov 2026</td>
+                            <td>09:30 AM</td>
+
+                            <td>
+                                <span class="status status-confirmed">
+                                    Confirmed
+                                </span>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-sm btn-light"
+                                        onclick="viewAppointment('APT001')">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+
+                        </tr>
+
+                        <tr data-date="2026-11-03"
+                            data-status="Pending">
+
+                            <td>#APT002</td>
+
+                            <td>
+                                <div class="patient-name">
+                                    Anjali Menon
+                                </div>
+                                <div class="patient-email">
+                                    anjali@gmail.com
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="doctor-avatar">DS</span>
+                                Dr. Sneha
+                            </td>
+
+                            <td>03 Nov 2026</td>
+                            <td>10:00 AM</td>
+
+                            <td>
+                                <span class="status status-pending">
+                                    Pending
+                                </span>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-sm btn-light"
+                                        onclick="viewAppointment('APT002')">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+
+                        </tr>
+
+                        <tr data-date="2026-11-03"
+                            data-status="Confirmed">
+
+                            <td>#APT003</td>
+
+                            <td>
+                                <div class="patient-name">
+                                    Arjun Nair
+                                </div>
+                                <div class="patient-email">
+                                    arjun@gmail.com
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="doctor-avatar">DM</span>
+                                Dr. Meera
+                            </td>
+
+                            <td>03 Nov 2026</td>
+                            <td>11:30 AM</td>
+
+                            <td>
+                                <span class="status status-confirmed">
+                                    Confirmed
+                                </span>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-sm btn-light"
+                                        onclick="viewAppointment('APT003')">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+
+                        </tr>
+
+                        <tr data-date="2026-11-03"
+                            data-status="Cancelled">
+
+                            <td>#APT004</td>
+
+                            <td>
+                                <div class="patient-name">
+                                    Priya Thomas
+                                </div>
+                                <div class="patient-email">
+                                    priya@gmail.com
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="doctor-avatar">DK</span>
+                                Dr. Kiran
+                            </td>
+
+                            <td>03 Nov 2026</td>
+                            <td>02:00 PM</td>
+
+                            <td>
+                                <span class="status status-cancelled">
+                                    Cancelled
+                                </span>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-sm btn-light"
+                                        onclick="viewAppointment('APT004')">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+                <div class="text-center text-secondary small d-none"
+                     id="noResults">
+                    No appointments found.
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Bottom Section -->
+        <div class="row g-4">
+
+            <!-- Top Doctors -->
+            <div class="col-lg-6" id="doctors">
+
+                <div class="panel">
+
+                    <div class="d-flex justify-content-between mb-4">
+
+                        <div>
+                            <h5 class="panel-title">
+                                Top Doctors
+                            </h5>
+
+                            <p class="panel-subtitle">
+                                Most viewed doctors this month
+                            </p>
+                        </div>
+
+                        <a href="#doctors" class="view-all">
+                            View All
+                        </a>
+
+                    </div>
+
+                    <div class="d-flex align-items-center
+                                justify-content-between mb-4">
+
+                        <div class="d-flex align-items-center">
+
+                            <div class="doctor-avatar"
+                                 style="width:45px;height:45px;">
+                                DR
+                            </div>
+
+                            <div>
+                                <div class="patient-name">
+                                    Dr. Rajesh Kumar
+                                </div>
+                                <div class="patient-email">
+                                    Cardiologist
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="text-end">
+                            <strong>1,245</strong>
+                            <div class="patient-email">Views</div>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex align-items-center
+                                justify-content-between mb-4">
+
+                        <div class="d-flex align-items-center">
+
+                            <div class="doctor-avatar"
+                                 style="width:45px;height:45px;
+                                        background:#f0eaff;color:#8b5cf6;">
+                                DS
+                            </div>
+
+                            <div>
+                                <div class="patient-name">
+                                    Dr. Sneha Menon
+                                </div>
+                                <div class="patient-email">
+                                    Dermatologist
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="text-end">
+                            <strong>985</strong>
+                            <div class="patient-email">Views</div>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex align-items-center
+                                justify-content-between">
+
+                        <div class="d-flex align-items-center">
+
+                            <div class="doctor-avatar"
+                                 style="width:45px;height:45px;
+                                        background:#fff1e5;color:#f59e0b;">
+                                DM
+                            </div>
+
+                            <div>
+                                <div class="patient-name">
+                                    Dr. Meera Nair
+                                </div>
+                                <div class="patient-email">
+                                    Pediatrician
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="text-end">
+                            <strong>872</strong>
+                            <div class="patient-email">Views</div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Recent Patients -->
+            <div class="col-lg-6" id="patients">
+
+                <div class="panel">
+
+                    <div class="d-flex justify-content-between mb-4">
+
+                        <div>
+                            <h5 class="panel-title">
+                                Recent Patients
+                            </h5>
+
+                            <p class="panel-subtitle">
+                                Recently registered patients
+                            </p>
+                        </div>
+
+                        <a href="#patients" class="view-all">
+                            View All
+                        </a>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table">
+
+                            <thead>
+                                <tr>
+                                    <th>PATIENT</th>
+                                    <th>REGISTERED</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        <div class="patient-name">
+                                            Neha Joseph
+                                        </div>
+                                        <div class="patient-email">
+                                            neha@gmail.com
+                                        </div>
+                                    </td>
+
+                                    <td>Today</td>
+
+                                    <td>
+                                        <span class="status status-confirmed">
+                                            Active
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="patient-name">
+                                            Akhil Varma
+                                        </div>
+                                        <div class="patient-email">
+                                            akhil@gmail.com
+                                        </div>
+                                    </td>
+
+                                    <td>Yesterday</td>
+
+                                    <td>
+                                        <span class="status status-confirmed">
+                                            Active
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="patient-name">
+                                            Diya Thomas
+                                        </div>
+                                        <div class="patient-email">
+                                            diya@gmail.com
+                                        </div>
+                                    </td>
+
+                                    <td>02 Nov 2026</td>
+
+                                    <td>
+                                        <span class="status status-confirmed">
+                                            Active
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-4 py-3">
+            <small class="text-secondary">
+                © 2026 CareConnect | Healthcare Appointment Management
+            </small>
+        </footer>
+
+    </section>
+
+</main>
+
+<!-- Appointment Details Modal -->
+<div class="modal fade" id="appointmentModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Appointment Details</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <p>
+                    <strong>Appointment ID:</strong>
+                    <span id="modalAppointmentId"></span>
+                </p>
+
+                <p>
+                    <strong>Patient:</strong>
+                    <span id="modalPatient"></span>
+                </p>
+
+                <p>
+                    <strong>Doctor:</strong>
+                    <span id="modalDoctor"></span>
+                </p>
+
+                <p>
+                    <strong>Date:</strong>
+                    <span id="modalDate"></span>
+                </p>
+
+                <p>
+                    <strong>Time:</strong>
+                    <span id="modalTime"></span>
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    <span id="modalStatus"></span>
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    // Sidebar Toggle
+
+    const sidebar = document.getElementById("sidebar");
+
+    document.getElementById("sidebarToggle")
+        .addEventListener("click", function () {
+
+            sidebar.classList.toggle("show");
+
+        });
+
+
+    // Global Search
+
+    document.getElementById("globalSearch")
+        .addEventListener("input", filterAppointments);
+
+
+    // Date Filter
+
+    document.getElementById("dateFilter")
+        .addEventListener("change", filterAppointments);
+
+
+    // Status Filter
+
+    document.getElementById("statusFilter")
+        .addEventListener("change", filterAppointments);
+
+
+    // Appointment Filtering
+
+    function filterAppointments() {
+
+        const searchValue = document
+            .getElementById("globalSearch")
+            .value.toLowerCase();
+
+        const dateValue = document
+            .getElementById("dateFilter")
+            .value;
+
+        const statusValue = document
+            .getElementById("statusFilter")
+            .value;
+
+        const rows = document.querySelectorAll(
+            "#appointmentTable tbody tr"
+        );
+
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+
+            const rowText = row.innerText.toLowerCase();
+
+            const rowDate = row.dataset.date;
+
+            const rowStatus = row.dataset.status;
+
+            const matchesSearch =
+                rowText.includes(searchValue);
+
+            const matchesDate =
+                !dateValue || rowDate === dateValue;
+
+            const matchesStatus =
+                statusValue === "all" ||
+                rowStatus === statusValue;
+
+            if (matchesSearch && matchesDate && matchesStatus) {
+
+                row.style.display = "";
+                visibleCount++;
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        });
+
+        document.getElementById("noResults")
+            .classList.toggle("d-none", visibleCount !== 0);
+
+    }
+
+
+    // View Appointment Details
+
+    function viewAppointment(id) {
+
+        const rows = document.querySelectorAll(
+            "#appointmentTable tbody tr"
+        );
+
+        let selectedRow = null;
+
+        rows.forEach(row => {
+
+            if (row.cells[0].innerText === "#" + id) {
+                selectedRow = row;
+            }
+
+        });
+
+        if (!selectedRow) return;
+
+        document.getElementById("modalAppointmentId")
+            .innerText = selectedRow.cells[0].innerText;
+
+        document.getElementById("modalPatient")
+            .innerText = selectedRow.cells[1].querySelector(
+                ".patient-name"
+            ).innerText;
+
+        document.getElementById("modalDoctor")
+            .innerText = selectedRow.cells[2].innerText;
+
+        document.getElementById("modalDate")
+            .innerText = selectedRow.cells[3].innerText;
+
+        document.getElementById("modalTime")
+            .innerText = selectedRow.cells[4].innerText;
+
+        document.getElementById("modalStatus")
+            .innerText = selectedRow.cells[5].innerText;
+
+        const modal = new bootstrap.Modal(
+            document.getElementById("appointmentModal")
+        );
+
+        modal.show();
+
+    }
+
+
+    // Appointment Overview Chart
+
+    const appointmentChartContext =
+        document.getElementById("appointmentChart");
+
+    const appointmentChart = new Chart(
+        appointmentChartContext,
+        {
+            type: "line",
+
+            data: {
+                labels: [
+                    "Jan", "Feb", "Mar", "Apr",
+                    "May", "Jun", "Jul", "Aug",
+                    "Sep", "Oct", "Nov", "Dec"
+                ],
+
+                datasets: [
+
+                    {
+                        label: "Appointments",
+
+                        data: [
+                            120, 190, 150, 250,
+                            220, 310, 280, 350,
+                            300, 420, 380, 450
+                        ],
+
+                        borderColor: "#0d9488",
+
+                        backgroundColor: "rgba(13,148,136,0.1)",
+
+                        fill: true,
+
+                        tension: 0.4,
+
+                        pointRadius: 3,
+
+                        pointBackgroundColor: "#0d9488"
+                    }
+
+                ]
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        grid: {
+                            color: "#f1f5f9"
+                        },
+
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        }
+
+                    },
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        },
+
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    // Appointment Chart Filter
+
+    document.getElementById("chartFilter")
+        .addEventListener("change", function () {
+
+            const type = this.value;
+
+            if (type === "weekly") {
+
+                appointmentChart.data.labels = [
+                    "Mon", "Tue", "Wed", "Thu",
+                    "Fri", "Sat", "Sun"
+                ];
+
+                appointmentChart.data.datasets[0].data = [
+                    30, 45, 35, 60, 50, 70, 40
+                ];
+
+            } else if (type === "monthly") {
+
+                appointmentChart.data.labels = [
+                    "Jan", "Feb", "Mar", "Apr",
+                    "May", "Jun", "Jul", "Aug",
+                    "Sep", "Oct", "Nov", "Dec"
+                ];
+
+                appointmentChart.data.datasets[0].data = [
+                    120, 190, 150, 250,
+                    220, 310, 280, 350,
+                    300, 420, 380, 450
+                ];
+
+            } else {
+
+                appointmentChart.data.labels = [
+                    "2022", "2023", "2024", "2025", "2026"
+                ];
+
+                appointmentChart.data.datasets[0].data = [
+                    800, 1200, 1800, 2500, 3200
+                ];
+
+            }
+
+            appointmentChart.update();
+
+        });
+
+
+    // Appointment Status Chart
+
+    new Chart(
+        document.getElementById("statusChart"),
+        {
+
+            type: "doughnut",
+
+            data: {
+
+                labels: [
+                    "Confirmed",
+                    "Pending",
+                    "Cancelled"
+                ],
+
+                datasets: [
+
+                    {
+
+                        data: [65, 25, 10],
+
+                        backgroundColor: [
+                            "#16a34a",
+                            "#f59e0b",
+                            "#ef4444"
+                        ],
+
+                        borderWidth: 0,
+
+                        hoverOffset: 5
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                cutout: "72%",
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
