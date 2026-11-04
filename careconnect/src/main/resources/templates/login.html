@@ -1,120 +1,336 @@
+
 <!DOCTYPE html>
-<html
-    lang="en"
-    xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Administrator Login</title>
+    <title>CareConnect | Administrator Login</title>
 
+    <!-- Bootstrap -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+        rel="stylesheet">
 
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #e6f7f5;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(15, 23, 42, 0.07);
+        }
+
+        .login-header {
+            text-align: center;
+            padding: 38px 32px 24px;
+        }
+
+        .brand-icon {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            background: var(--primary);
+            color: #ffffff;
+            border-radius: 15px;
+            font-size: 28px;
+        }
+
+        .brand-name {
+            font-size: 25px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        .login-body {
+            padding: 8px 32px 32px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            min-height: 48px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            font-size: 14px;
+            padding: 12px 14px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .input-icon .form-control {
+            padding-left: 42px;
+        }
+
+        .login-btn {
+            width: 100%;
+            min-height: 48px;
+            background: var(--primary);
+            border: none;
+            border-radius: 9px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-dark);
+            color: #ffffff;
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 22px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .security-note i {
+            color: var(--primary);
+        }
+
+        .login-footer {
+            text-align: center;
+            padding: 18px;
+            border-top: 1px solid var(--border);
+            background: #f8fafc;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .login-footer strong {
+            color: var(--primary);
+        }
+
+        @media (max-width: 480px) {
+            .login-header {
+                padding: 30px 22px 20px;
+            }
+
+            .login-body {
+                padding: 8px 22px 28px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
-<div class="container">
+<div class="login-wrapper">
 
-    <div class="row justify-content-center mt-5">
+    <div class="login-card">
 
-        <div class="col-md-5">
+        <!-- Header -->
+        <div class="login-header">
 
-            <div class="card">
+            <div class="brand-icon">
+                <i class="bi bi-heart-pulse-fill"></i>
+            </div>
 
-                <div class="card-header bg-dark text-white">
+            <div class="brand-name">
+                CareConnect
+            </div>
 
-                    Administrator Login
+            <h5 class="fw-semibold mb-2">
+                Administrator Login
+            </h5>
 
-                </div>
+            <p class="login-subtitle">
+                Sign in to manage your healthcare platform
+            </p>
 
-                <div class="card-body">
+        </div>
 
-                    <div
-                        th:if="${param.error}"
-                        class="alert alert-danger"
-                    >
-                        Invalid email or password.
-                    </div>
+        <!-- Login Form -->
+        <div class="login-body">
 
-                    <div
-                        th:if="${param.logout}"
-                        class="alert alert-success"
-                    >
-                        You have been logged out.
-                    </div>
+            <div
+                th:if="${param.error}"
+                class="alert alert-danger"
+                role="alert">
 
-                    <form
-                        th:action="@{/login}"
-                        method="post"
-                    >
-
-                        <div class="mb-3">
-
-                            <label
-                                for="username"
-                                class="form-label"
-                            >
-                                Email
-                            </label>
-
-                            <input
-                                type="email"
-                                id="username"
-                                name="username"
-                                class="form-control"
-                                required
-                            >
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label
-                                for="password"
-                                class="form-label"
-                            >
-                                Password
-                            </label>
-
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                class="form-control"
-                                required
-                            >
-
-                        </div>
-
-                        <input
-                            type="hidden"
-                            th:name="${_csrf?.parameterName}"
-                            th:value="${_csrf?.token}"
-                        >
-
-                        <button
-                            type="submit"
-                            class="btn btn-primary w-100"
-                        >
-                            Login
-                        </button>
-
-                    </form>
-
-                </div>
+                <i class="bi bi-exclamation-circle me-2"></i>
+                Invalid email or password.
 
             </div>
+
+            <div
+                th:if="${param.logout}"
+                class="alert alert-success"
+                role="alert">
+
+                <i class="bi bi-check-circle me-2"></i>
+                You have been logged out.
+
+            </div>
+
+            <form
+                th:action="@{/login}"
+                method="post">
+
+                <!-- Email -->
+                <div class="mb-4">
+
+                    <label
+                        for="username"
+                        class="form-label">
+
+                        Email Address
+
+                    </label>
+
+                    <div class="input-icon">
+
+                        <i class="bi bi-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="username"
+                            name="username"
+                            class="form-control"
+                            placeholder="admin@example.com"
+                            autocomplete="username"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+
+                    <label
+                        for="password"
+                        class="form-label">
+
+                        Password
+
+                    </label>
+
+                    <div class="input-icon">
+
+                        <i class="bi bi-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <!-- CSRF Token -->
+                <input
+                    type="hidden"
+                    th:name="${_csrf?.parameterName}"
+                    th:value="${_csrf?.token}">
+
+                <!-- Submit -->
+                <button
+                    type="submit"
+                    class="btn login-btn">
+
+                    Sign In
+                    <i class="bi bi-arrow-right ms-2"></i>
+
+                </button>
+
+            </form>
+
+            <div class="security-note">
+                <i class="bi bi-shield-lock-fill"></i>
+                Secure administrator access
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="login-footer">
+
+            © 2026 <strong>CareConnect</strong>.
+            Healthcare management made simple.
 
         </div>
 
@@ -123,5 +339,4 @@
 </div>
 
 </body>
-
 </html>

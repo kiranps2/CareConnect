@@ -19,7 +19,7 @@
     <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet">
-<link rel="stylesheet" th:href="@{/css/admin.css}">
+<link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <style>
         :root {
             --primary: #0d9488;
@@ -43,88 +43,7 @@
 
         /* Sidebar */
 
-        .sidebar {
-            width: var(--sidebar-width);
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: #fff;
-            border-right: 1px solid #edf0f5;
-            padding: 25px 18px;
-            z-index: 1000;
-            transition: 0.3s;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0 10px;
-            margin-bottom: 40px;
-        }
-
-        .brand-icon {
-            width: 42px;
-            height: 42px;
-            background: var(--primary);
-            color: white;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-
-        .brand h4 {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .brand span {
-            color: var(--primary);
-        }
-
-        .menu-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: #a0aec0;
-            letter-spacing: 1px;
-            padding: 0 12px;
-            margin-bottom: 15px;
-        }
-
-        .sidebar .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 13px 14px;
-            margin-bottom: 7px;
-            color: #64748b;
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 9px;
-            transition: 0.2s;
-        }
-
-        .sidebar .nav-link i {
-            font-size: 18px;
-        }
-
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link.active {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .sidebar-bottom {
-            position: absolute;
-            bottom: 25px;
-            left: 18px;
-            right: 18px;
-        }
-
+       
         /* Main content */
 
         .main-content {
@@ -333,39 +252,56 @@
             color: white;
         }
 
-        .mobile-toggle {
+        /* .mobile-toggle {
             display: none;
             border: none;
             background: transparent;
             font-size: 24px;
             color: var(--dark);
-        }
+        } */
 
         @media (max-width: 991px) {
-            .sidebar {
-                left: -250px;
-            }
 
-            .sidebar.show {
-                left: 0;
-            }
+    /* Icon-only sidebar, same as report page */
+    .sidebar {
+        width: 75px;
+        padding: 24px 10px;
+    }
 
-            .main-content {
-                margin-left: 0;
-            }
+    .brand {
+        justify-content: center;
+        padding: 0;
+    }
 
-            .mobile-toggle {
-                display: block;
-            }
+    .brand-text,
+    .nav-label,
+    .sidebar .nav-link span {
+        display: none;
+    }
 
-            .dashboard-content {
-                padding: 20px;
-            }
+    .sidebar .nav-link {
+        justify-content: center;
+        padding: 13px 8px;
+        gap: 0;
+    }
 
-            .topbar {
-                padding: 15px 20px;
-            }
-        }
+    .sidebar .nav-link i {
+        font-size: 20px;
+        margin: 0;
+    }
+
+    .main-content {
+        margin-left: 75px;
+    }
+
+    .dashboard-content {
+        padding: 20px;
+    }
+
+    .topbar {
+        padding: 15px 20px;
+    }
+}
 
         @media (max-width: 576px) {
             .search-box {
@@ -404,9 +340,9 @@
     <header class="topbar">
 
         <div class="d-flex align-items-center gap-3">
-            <button class="mobile-toggle" id="sidebarToggle">
+            <!-- <button class="mobile-toggle" id="sidebarToggle">
                 <i class="bi bi-list"></i>
-            </button>
+            </button> -->
 
             <div class="search-box">
                 <i class="bi bi-search text-secondary"></i>
@@ -798,9 +734,9 @@
     );
 
     // Mobile sidebar
-    document.getElementById("sidebarToggle").addEventListener("click", function () {
-        document.getElementById("sidebar").classList.toggle("show");
-    });
+   // document.getElementById("sidebarToggle").addEventListener("click", function () {
+     //   document.getElementById("sidebar").classList.toggle("show");
+   // });
 
     // Open add patient form
     function openAddModal() {

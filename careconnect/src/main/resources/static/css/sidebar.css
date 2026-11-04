@@ -71,5 +71,20 @@
         .sidebar .nav-link i {
             font-size: 17px;
         }
+        .logout-form {
+    margin: 0;
+}
 
-        
+.sidebar .logout-link {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.sidebar .logout-link:hover {
+    background: #f1f5f9;
+    color: var(--primary);
+}
