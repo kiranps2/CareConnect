@@ -1,4 +1,4 @@
-<aside th:fragment="sidebar" class="sidebar">
+<aside th:fragment="sidebar(activePage)" class="sidebar">
     <aside class="sidebar">
     <div class="brand">
         <div class="brand-icon">
@@ -10,27 +10,27 @@
     <div class="nav-label">Main Menu</div>
 
     <nav>
-        <a class="nav-link" th:href="@{/}">
+        <a class="nav-link" th:href="@{/}" th:classappend="${activePage == 'dashboard'} ? ' active' : ''">
             <i class="bi bi-grid"></i>
             <span>Dashboard</span>
         </a>
 
-        <a class="nav-link" th:href="@{/appointments}">
+        <a class="nav-link" th:href="@{/appointments}" th:classappend="${activePage == 'appointments'} ? ' active' : ''">
             <i class="bi bi-calendar-check"></i>
             <span>Appointments</span>
         </a>
 
-        <a class="nav-link" th:href="@{/doctors}">
+        <a class="nav-link" th:href="@{/doctors}" th:classappend="${activePage == 'doctors'} ? ' active' : ''">
             <i class="bi bi-person-badge"></i>
             <span>Doctors</span>
         </a>
 
-        <a class="nav-link" th:href="@{/patients}">
+        <a class="nav-link" th:href="@{/patients}" th:classappend="${activePage == 'patients'} ? ' active' : ''">
             <i class="bi bi-people"></i>
             <span>Patients</span>
         </a>
 
-        <a class="nav-link active" th:href="@{/reports}">
+        <a class="nav-link" th:href="@{/reports}" th:classappend="${activePage == 'reports'} ? ' active' : ''">
             <i class="bi bi-bar-chart-line"></i>
             <span>Reports</span>
         </a>
@@ -39,7 +39,7 @@
     <div class="nav-label">Account</div>
 
     <nav>
-        <a class="nav-link" th:href="@{/settings}">
+        <a class="nav-link" th:href="@{/settings}" th:classappend="${activePage == 'settings'} ? ' active' : ''">
             <i class="bi bi-gear"></i>
             <span>Settings</span>
         </a>
