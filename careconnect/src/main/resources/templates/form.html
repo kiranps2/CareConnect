@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareConnect | Doctor Form</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Sidebar CSS -->
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-light: #e6f7f5;
+            --dark: #172b4d;
+            --muted: #8492a6;
+            --sidebar-width: 250px;
+            --bg: #f5f8fc;
+            --border: #edf0f5;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--dark);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        /* Topbar */
+        .topbar {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 36px; height: 36px;
+            border-radius: 9px;
+            border: 1px solid var(--border);
+            background: white;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--dark);
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+        .back-btn:hover { background: var(--bg); color: var(--primary); border-color: var(--primary); }
+
+        .topbar-title { font-size: 15px; font-weight: 600; }
+        .topbar-subtitle { font-size: 11px; color: var(--muted); }
+
+        .admin-profile { display: flex; align-items: center; gap: 12px; }
+        .admin-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #d8f3ee; color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+        }
+        .admin-profile h6 { font-size: 13px; margin: 0; font-weight: 600; }
+        .admin-profile small { font-size: 11px; color: var(--muted); }
+
+        /* Page content */
+        .page-content { padding: 30px; }
+
+        /* Breadcrumb */
+        .breadcrumb-custom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+        .breadcrumb-custom a { color: var(--muted); text-decoration: none; }
+        .breadcrumb-custom a:hover { color: var(--primary); }
+        .breadcrumb-custom .current { color: var(--dark); font-weight: 600; }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(30,60,90,0.04);
+        }
+
+        .form-card-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a7a70 100%);
+            padding: 28px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .form-header-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .form-header-text h4 {
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 0 4px;
+        }
+
+        .form-header-text p {
+            color: rgba(255,255,255,0.75);
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .form-card-body { padding: 32px; }
+
+        /* Section Label */
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Form Controls */
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .form-label .required { color: #ef4444; margin-left: 2px; }
+
+        .form-control, .form-select {
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            padding: 11px 14px;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            transition: 0.2s;
+            background: #fafbfc;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13,148,136,0.12);
+            background: white;
+            outline: none;
+        }
+
+        .form-control::placeholder { color: #b0bec5; font-size: 12px; }
+
+        .input-icon-wrap {
+            position: relative;
+        }
+
+        .input-icon-wrap .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .input-icon-wrap .form-control {
+            padding-left: 36px;
+        }
+
+        /* Error messages */
+        .field-error {
+            font-size: 11px;
+            color: #ef4444;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Toggle Switch */
+        .toggle-wrap {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-info h6 { font-size: 13px; font-weight: 600; margin: 0 0 2px; }
+        .toggle-info small { font-size: 11px; color: var(--muted); }
+
+        .form-switch .form-check-input {
+            width: 44px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 28px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #0a7a70;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(13,148,136,0.3);
+        }
+
+        .btn-cancel {
+            background: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 13px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: var(--bg);
+            color: var(--dark);
+            border-color: #cbd5e1;
+        }
+
+        .form-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 28px 0;
+        }
+
+        /* Info tip */
+        .form-tip {
+            background: var(--primary-light);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            font-size: 12px;
+            color: #0f766e;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 991px) {
+            .sidebar { width: 75px; padding: 24px 10px; }
+            .brand { justify-content: center; padding: 0; }
+            .brand-text, .nav-label, .sidebar .nav-link span { display: none; }
+            .sidebar .nav-link { justify-content: center; padding: 13px 8px; gap: 0; }
+            .sidebar .nav-link i { font-size: 20px; margin: 0; }
+            .main-content { margin-left: 75px; }
+            .page-content { padding: 20px; }
+            .topbar { padding: 15px 20px; }
+            .form-card-body { padding: 20px; }
+        }
+
+        @media (max-width: 576px) {
+            .admin-profile h6, .admin-profile small { display: none; }
+            .page-content { padding: 15px; }
+            .form-card-header { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div th:replace="~{fragments/sidebar :: sidebar('doctor')}"></div>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <a href="/doctor" class="back-btn" title="Back to Doctors">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <div class="topbar-title"
+                     th:text="${doctor.id != null} ? 'Edit Doctor' : 'Add New Doctor'">
+                    Add New Doctor
+                </div>
+                <div class="topbar-subtitle">Doctor Management</div>
+            </div>
+        </div>
+
+        <div class="admin-profile">
+            <button class="btn btn-light position-relative">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+            </button>
+            <div class="admin-avatar">AD</div>
+            <div>
+                <h6>Admin User</h6>
+                <small>Administrator</small>
+            </div>
+            <i class="bi bi-chevron-down text-secondary"></i>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <section class="page-content">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-custom">
+            <i class="bi bi-house"></i>
+            <a href="/">Dashboard</a>
+            <i class="bi bi-chevron-right" style="font-size:10px;"></i>
+            <a href="/doctor">Doctors</a>
+            <i class="bi bi-chevron-right" style="font-size:10px;"></i>
+            <span class="current"
+                  th:text="${doctor.id != null} ? 'Edit Doctor' : 'Add Doctor'">Add Doctor</span>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+
+            <!-- Card Header -->
+            <div class="form-card-header">
+                <div class="form-header-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div class="form-header-text">
+                    <h4 th:text="${doctor.id != null} ? 'Edit Doctor Details' : 'Register New Doctor'">
+                        Register New Doctor
+                    </h4>
+                    <p>Fill in the details below to add a new doctor to the CareConnect system.</p>
+                </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="form-card-body">
+
+                <!-- Tip -->
+                <div class="form-tip">
+                    <i class="bi bi-info-circle-fill" style="margin-top:1px; flex-shrink:0;"></i>
+                    <span>All fields marked with <strong>*</strong> are required. Make sure the email address is unique for each doctor.</span>
+                </div>
+
+                <form th:action="${doctor.id != null} ? @{/doctor/edit/{id}(id=${doctor.id})} : @{/doctor/add}"
+                      th:object="${doctor}"
+                      method="post">
+
+                    <!-- CSRF Token -->
+                    <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}">
+
+                    <!-- ── Section: Personal Info ───────────────────────── -->
+                    <div class="section-label">
+                        <i class="bi bi-person me-2"></i>Personal Information
+                    </div>
+
+                    <div class="row g-4 mb-4">
+
+                        <!-- Name -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Full Name <span class="required">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="bi bi-person input-icon"></i>
+                                <input type="text"
+                                       th:field="*{name}"
+                                       class="form-control"
+                                       placeholder="e.g. Dr. Rajesh Kumar"
+                                       required>
+                            </div>
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('name')}">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <span th:errors="*{name}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Email Address <span class="required">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="bi bi-envelope input-icon"></i>
+                                <input type="email"
+                                       th:field="*{email}"
+                                       class="form-control"
+                                       placeholder="doctor@hospital.com"
+                                       required>
+                            </div>
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('email')}">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <span th:errors="*{email}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Phone Number <span class="required">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="bi bi-telephone input-icon"></i>
+                                <input type="text"
+                                       th:field="*{phoneNumber}"
+                                       class="form-control"
+                                       placeholder="+91 9876543210"
+                                       required>
+                            </div>
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('phoneNumber')}">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <span th:errors="*{phoneNumber}"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="form-divider">
+
+                    <!-- ── Section: Professional Info ──────────────────── -->
+                    <div class="section-label">
+                        <i class="bi bi-award me-2"></i>Professional Details
+                    </div>
+
+                    <div class="row g-4 mb-4">
+
+                        <!-- Specialization -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Specialization <span class="required">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="bi bi-heart-pulse input-icon"></i>
+                                <input type="text"
+                                       th:field="*{specialization}"
+                                       class="form-control"
+                                       placeholder="e.g. Cardiology"
+                                       required>
+                            </div>
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('specialization')}">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <span th:errors="*{specialization}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Qualification -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Qualification <span class="required">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="bi bi-mortarboard input-icon"></i>
+                                <input type="text"
+                                       th:field="*{qualification}"
+                                       class="form-control"
+                                       placeholder="e.g. MBBS, MD"
+                                       required>
+                            </div>
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('qualification')}">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <span th:errors="*{qualification}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Experience -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Years of Experience <span class="required">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="bi bi-clock-history input-icon"></i>
+                                <input type="number"
+                                       th:field="*{experience}"
+                                       class="form-control"
+                                       placeholder="e.g. 10"
+                                       min="0"
+                                       required>
+                            </div>
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('experience')}">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <span th:errors="*{experience}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Consultation Fee -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Consultation Fee (₹) <span class="required">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="bi bi-currency-rupee input-icon"></i>
+                                <input type="number"
+                                       th:field="*{consultationFee}"
+                                       class="form-control"
+                                       placeholder="e.g. 500"
+                                       min="0"
+                                       step="0.01"
+                                       required>
+                            </div>
+                            <div class="field-error"
+                                 th:if="${#fields.hasErrors('consultationFee')}">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <span th:errors="*{consultationFee}"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="form-divider">
+
+                    <!-- ── Section: Status ─────────────────────────────── -->
+                    <div class="section-label">
+                        <i class="bi bi-toggle-on me-2"></i>Availability Status
+                    </div>
+
+                    <div class="toggle-wrap mb-4">
+                        <div class="toggle-info">
+                            <h6>Doctor Active Status</h6>
+                            <small>When active, this doctor will appear in appointment booking.</small>
+                        </div>
+                        <div class="form-check form-switch mb-0">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   th:field="*{isActive}"
+                                   id="isActiveToggle">
+                        </div>
+                    </div>
+
+                    <hr class="form-divider">
+
+                    <!-- ── Action Buttons ──────────────────────────────── -->
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <i class="bi bi-check-lg"></i>
+                            <span th:text="${doctor.id != null} ? 'Update Doctor' : 'Save Doctor'">
+                                Save Doctor
+                            </span>
+                        </button>
+
+                        <a href="/doctor" class="btn-cancel">
+                            <i class="bi bi-x-lg"></i>
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+</body>
+</html>
