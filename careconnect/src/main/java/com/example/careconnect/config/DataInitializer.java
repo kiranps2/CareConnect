@@ -26,7 +26,7 @@ public class DataInitializer {
 
                 User user = new User();
 
-                user.setName("Administrator");
+                user.setFirstName("Administrator");
 
                 user.setEmail(
                     "admin@careconnect.com"

@@ -574,60 +574,45 @@
             </div>
 
             <!-- Filters -->
-            <div class="row g-3 mb-4">
+            <form
+                method="get"
+                th:action="@{/appointments}"
+                class="row g-3 mb-4"
+            >
 
-                <div class="col-lg-4 col-md-6">
+                <div class="col-md-4">
 
-                    <div class="input-group">
+                    <label
+                        class="form-label"
+                        for="date"
+                    >
+                        Date
+                    </label>
 
-                        <span class="input-group-text bg-white">
-                            <i class="bi bi-search text-secondary"></i>
-                        </span>
-
-                        <input type="text"
-                               class="form-control filter-control"
-                               id="tableSearch"
-                               placeholder="Search patient, doctor, ID...">
-
-                    </div>
-
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-
-                    <input type="date"
-                           class="form-control filter-control"
-                           id="dateFilter">
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        class="form-control"
+                        th:value="${selectedDate}"
+                    >
 
                 </div>
 
-                <div class="col-lg-3 col-md-6">
+                <div class="col-md-2
+                            d-flex
+                            align-items-end">
 
-                    <select class="form-select filter-control"
-                            id="statusFilter">
-
-                        <option value="all">All Status</option>
-                        <option value="Confirmed">Confirmed</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Cancelled">Cancelled</option>
-
-                    </select>
-
-                </div>
-
-                <div class="col-lg-2 col-md-6">
-
-                    <button class="btn btn-light w-100"
-                            onclick="resetFilters()">
-
-                        <i class="bi bi-arrow-counterclockwise me-1"></i>
-                        Reset
-
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Search
                     </button>
 
                 </div>
 
-            </div>
+            </form>
 
             <!-- Table -->
             <div class="table-responsive">
@@ -639,14 +624,71 @@
                             <th>APPOINTMENT ID</th>
                             <th>PATIENT</th>
                             <th>DOCTOR</th>
-                            <th>DATE</th>
-                            <th>TIME</th>
+                            
                             <th>STATUS</th>
                             <th>ACTION</th>
                         </tr>
                     </thead>
 
-                    <tbody id="appointmentBody">
+                    <tbody>
+                        <tr
+                                th:each="appointment :
+                                ${appointments}"
+                            >
+
+                                <td
+                                    th:text="${appointment.appointmentTime}"
+                                >
+                                </td>
+
+                                <td
+                                    th:text="${appointment.patient.name}"
+                                >
+                                </td>
+
+                                <td
+                                    th:text="${appointment.doctor.name}"
+                                >
+                                </td>
+
+                                <td
+                                    th:text="${appointment.status}"
+                                >
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        th:href="@{
+                                            /appointments/view/
+                                            {id}
+                                            (id=${appointment.id})
+                                        }"
+                                        class="btn btn-sm
+                                               btn-primary"
+                                    >
+                                        View
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            <tr
+                                th:if="${#lists.isEmpty(
+                                    appointments
+                                )}"
+                            >
+
+                                <td
+                                    colspan="5"
+                                    class="text-center"
+                                >
+                                    No appointments available.
+                                </td>
+
+                            </tr>
+
                     </tbody>
 
                 </table>
@@ -860,80 +902,80 @@
 
     // Sample appointment data
 
-    let appointments = [
-        {
-            id: "APT001",
-            patient: "Rahul Kumar",
-            email: "rahul@gmail.com",
-            doctor: "Dr. Rajesh Kumar",
-            date: "2026-11-03",
-            time: "09:30",
-            status: "Confirmed"
-        },
-        {
-            id: "APT002",
-            patient: "Anjali Menon",
-            email: "anjali@gmail.com",
-            doctor: "Dr. Sneha Menon",
-            date: "2026-11-03",
-            time: "10:00",
-            status: "Pending"
-        },
-        {
-            id: "APT003",
-            patient: "Arjun Nair",
-            email: "arjun@gmail.com",
-            doctor: "Dr. Meera Nair",
-            date: "2026-11-03",
-            time: "11:30",
-            status: "Confirmed"
-        },
-        {
-            id: "APT004",
-            patient: "Priya Thomas",
-            email: "priya@gmail.com",
-            doctor: "Dr. Kiran",
-            date: "2026-11-03",
-            time: "14:00",
-            status: "Cancelled"
-        },
-        {
-            id: "APT005",
-            patient: "Neha Joseph",
-            email: "neha@gmail.com",
-            doctor: "Dr. Rajesh Kumar",
-            date: "2026-11-04",
-            time: "09:00",
-            status: "Confirmed"
-        },
-        {
-            id: "APT006",
-            patient: "Akhil Varma",
-            email: "akhil@gmail.com",
-            doctor: "Dr. Sneha Menon",
-            date: "2026-11-04",
-            time: "10:30",
-            status: "Pending"
-        },
-        {
-            id: "APT007",
-            patient: "Diya Thomas",
-            email: "diya@gmail.com",
-            doctor: "Dr. Meera Nair",
-            date: "2026-11-05",
-            time: "12:00",
-            status: "Confirmed"
-        },
-        {
-            id: "APT008",
-            patient: "Vishnu Raj",
-            email: "vishnu@gmail.com",
-            doctor: "Dr. Kiran",
-            date: "2026-11-05",
-            time: "15:00",
-            status: "Pending"
-        }
-    ];
+    // let appointments = [
+    //     {
+    //         id: "APT001",
+    //         patient: "Rahul Kumar",
+    //         email: "rahul@gmail.com",
+    //         doctor: "Dr. Rajesh Kumar",
+    //         date: "2026-11-03",
+    //         time: "09:30",
+    //         status: "Confirmed"
+    //     },
+    //     {
+    //         id: "APT002",
+    //         patient: "Anjali Menon",
+    //         email: "anjali@gmail.com",
+    //         doctor: "Dr. Sneha Menon",
+    //         date: "2026-11-03",
+    //         time: "10:00",
+    //         status: "Pending"
+    //     },
+    //     {
+    //         id: "APT003",
+    //         patient: "Arjun Nair",
+    //         email: "arjun@gmail.com",
+    //         doctor: "Dr. Meera Nair",
+    //         date: "2026-11-03",
+    //         time: "11:30",
+    //         status: "Confirmed"
+    //     },
+    //     {
+    //         id: "APT004",
+    //         patient: "Priya Thomas",
+    //         email: "priya@gmail.com",
+    //         doctor: "Dr. Kiran",
+    //         date: "2026-11-03",
+    //         time: "14:00",
+    //         status: "Cancelled"
+    //     },
+    //     {
+    //         id: "APT005",
+    //         patient: "Neha Joseph",
+    //         email: "neha@gmail.com",
+    //         doctor: "Dr. Rajesh Kumar",
+    //         date: "2026-11-04",
+    //         time: "09:00",
+    //         status: "Confirmed"
+    //     },
+    //     {
+    //         id: "APT006",
+    //         patient: "Akhil Varma",
+    //         email: "akhil@gmail.com",
+    //         doctor: "Dr. Sneha Menon",
+    //         date: "2026-11-04",
+    //         time: "10:30",
+    //         status: "Pending"
+    //     },
+    //     {
+    //         id: "APT007",
+    //         patient: "Diya Thomas",
+    //         email: "diya@gmail.com",
+    //         doctor: "Dr. Meera Nair",
+    //         date: "2026-11-05",
+    //         time: "12:00",
+    //         status: "Confirmed"
+    //     },
+    //     {
+    //         id: "APT008",
+    //         patient: "Vishnu Raj",
+    //         email: "vishnu@gmail.com",
+    //         doctor: "Dr. Kiran",
+    //         date: "2026-11-05",
+    //         time: "15:00",
+    //         status: "Pending"
+    //     }
+    // ];
 
 
     // Pagination

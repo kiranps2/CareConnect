@@ -3,7 +3,7 @@ import com.example.careconnect.entity.Doctor;
 import com.example.careconnect.repository.DoctorRepository;
 
 import org.springframework.stereotype.Service;
-
+import com.example.careconnect.dto.DoctorReport;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -35,6 +35,11 @@ public class DoctorService {
     public void deleteDoctor(Long id) {
 
         doctorRepository.deleteById(id);
+    }
+    public List<DoctorReport> getPopularDoctors() {
+
+        return doctorRepository
+            .getPopularDoctors();
     }
     
 }

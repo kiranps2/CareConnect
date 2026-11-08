@@ -450,10 +450,35 @@
                         <i class="bi bi-search text-secondary"></i>
                     </span>
 
-                    <input type="text" id="searchPatient"
-                           class="form-control border-start-0"
-                           placeholder="Search patients..."
-                           oninput="searchPatients()">
+                    <form
+                method="get"
+                th:action="@{/users}"
+                class="row g-3 mb-4"
+            >
+
+                <div class="col-md-5">
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search users"
+                    >
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Search
+                    </button>
+
+                </div>
+
+            </form>
                 </div>
 
             </div>
@@ -464,95 +489,54 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>PATIENT</th>
-                        <th>EMAIL</th>
-                        <th>GENDER</th>
-                        <th>AGE</th>
-                        <th>REGISTERED</th>
-                        <th>STATUS</th>
-                        <th>ACTIONS</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
 
                     <tbody id="patientTableBody">
 
-                    <tr data-id="1">
+                    <tr data-id="1" th:each="user : ${users}">
                         <td>1</td>
+                        <td th:text="${user.firstName
+                                        + ' '
+                                        + user.lastName}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.phoneNumber}"></td>
                         <td>
-                            <span class="patient-avatar">AK</span>
-                            <span class="patient-name">Arun Kumar</span>
-                            <div class="patient-phone ms-5">+91 9876543210</div>
-                        </td>
-                        <td>arun@example.com</td>
-                        <td>Male</td>
-                        <td>28</td>
-                        <td>02 Nov 2026</td>
-                        <td>
-                            <span class="status-badge status-active">Active</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-light text-info"
-                                    onclick="viewPatient(this)" title="View">
-                                <i class="bi bi-eye"></i>
-                            </button>
 
-                            <button class="btn btn-sm btn-light text-primary"
-                                    onclick="editPatient(this)" title="Edit">
-                                <i class="bi bi-pencil"></i>
-                            </button>
+                                    <a
+                                        th:href="@{
+                                            /users/{id}
+                                            (id=${user.id})
+                                        }"
+                                        class="btn btn-sm
+                                               btn-primary"
+                                    >
+                                        View
+                                    </a>
 
-                            <button class="btn btn-sm btn-light text-warning"
-                                    onclick="togglePatientStatus(this)"
-                                    title="Change status">
-                                <i class="bi bi-arrow-repeat"></i>
-                            </button>
-
-                            <button class="btn btn-sm btn-light text-danger"
-                                    onclick="deletePatient(this)" title="Delete">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
+                                </td>
+                        
                     </tr>
 
-                    <tr data-id="2">
-                        <td>2</td>
-                        <td>
-                            <span class="patient-avatar">SM</span>
-                            <span class="patient-name">Sneha Menon</span>
-                            <div class="patient-phone ms-5">+91 9876543211</div>
-                        </td>
-                        <td>sneha@example.com</td>
-                        <td>Female</td>
-                        <td>32</td>
-                        <td>01 Nov 2026</td>
-                        <td>
-                            <span class="status-badge status-active">Active</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-light text-info"
-                                    onclick="viewPatient(this)" title="View">
-                                <i class="bi bi-eye"></i>
-                            </button>
+                    
+                            <tr
+                                th:if="${#lists.isEmpty(users)}"
+                            >
 
-                            <button class="btn btn-sm btn-light text-primary"
-                                    onclick="editPatient(this)" title="Edit">
-                                <i class="bi bi-pencil"></i>
-                            </button>
+                                <td
+                                    colspan="4"
+                                    class="text-center"
+                                >
+                                    No patients available.
+                                </td>
 
-                            <button class="btn btn-sm btn-light text-warning"
-                                    onclick="togglePatientStatus(this)"
-                                    title="Change status">
-                                <i class="bi bi-arrow-repeat"></i>
-                            </button>
+                            </tr>
 
-                            <button class="btn btn-sm btn-light text-danger"
-                                    onclick="deletePatient(this)" title="Delete">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr data-id="3">
+                    <!-- <tr data-id="3">
                         <td>3</td>
                         <td>
                             <span class="patient-avatar">RJ</span>
@@ -588,7 +572,7 @@
                                 <i class="bi bi-trash"></i>
                             </button>
                         </td>
-                    </tr>
+                    </tr> -->
 
                     </tbody>
                 </table>

@@ -12,26 +12,26 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank
+    @NotBlank(message="name is important")
     @Column(nullable = false, length = 100)
     private String name;
    
-    @NotBlank
+    @NotBlank(message="specialization is important")
     @Column(nullable = false, length = 100)
     private String specialization;
-
+    @NotBlank(message="phone number is important")
     @Column(nullable = false, length = 100)
     private String qualification;
     
-    @NotNull
+    @NotNull(message="experience is important")
     @Min(0)
     @Column(nullable = false)
     private Integer experience;
-
+    @NotBlank(message="phone number is important")
     @Column(name = "phone_number", nullable = false, length = 15)
     private String phoneNumber;
     
-    @NotBlank
+    @NotBlank(message="email is important")
     @Email
     @Column(nullable = false, unique = true)
     private String email;
