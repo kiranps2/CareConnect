@@ -13,13 +13,13 @@ public interface DoctorRepository
                  @Query("""
         SELECT new com.example.careconnect.dto.DoctorReport(
             d,
-            COUNT(a)
+            COUNT(DISTINCT a.patient)
         )
         FROM Doctor d
         LEFT JOIN Appointment a
             ON a.doctor.id = d.id
         GROUP BY d
-        ORDER BY COUNT(a) DESC
+        ORDER BY COUNT(DISTINCT a.patient) DESC
     """)
     List<DoctorReport> getPopularDoctors();
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-
     private final AppointmentService appointmentService;
 
     public UserController(
@@ -21,18 +20,17 @@ public class UserController {
             AppointmentService appointmentService) {
 
         this.userService = userService;
-        this.appointmentService =
-                appointmentService;
+        this.appointmentService = appointmentService;
     }
 
     @GetMapping
-    public String listUsers(Model model) {
+    public String listUsers(
+            @RequestParam(required = false) String search,
+            Model model) {
 
-        model.addAttribute(
-            "users",
-            userService.getAllPatients()
-        );
-
+        model.addAttribute("users", userService.searchPatients(search));
+        // Echo the search term back so the input stays filled
+        model.addAttribute("search", search != null ? search : "");
         return "patients";
     }
 
@@ -42,18 +40,11 @@ public class UserController {
             Model model) {
 
         User user = userService.getUserById(id);
-
-        model.addAttribute(
-            "user",
-            user
-        );
-
+        model.addAttribute("user", user);
         model.addAttribute(
             "appointments",
-            appointmentService
-                .getAppointmentsByPatient(id)
+            appointmentService.getAppointmentsByPatient(id)
         );
-
         return "userview";
     }
 }

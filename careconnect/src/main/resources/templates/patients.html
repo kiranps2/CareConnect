@@ -445,41 +445,26 @@
                     </p>
                 </div>
 
-                <div class="input-group" style="max-width: 280px;">
-                    <span class="input-group-text bg-white border-end-0">
-                        <i class="bi bi-search text-secondary"></i>
-                    </span>
-
-                    <form
-                method="get"
-                th:action="@{/users}"
-                class="row g-3 mb-4"
-            >
-
-                <div class="col-md-5">
-
-                    <input
-                        type="text"
-                        name="search"
-                        class="form-control"
-                        placeholder="Search users"
-                    >
-
-                </div>
-
-                <div class="col-md-2">
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                    >
+                <!-- ── Search bar ── -->
+                <form method="get" th:action="@{/patients}"
+                      class="d-flex align-items-center gap-2"
+                      style="max-width:320px; width:100%;">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"
+                              style="border-radius:9px 0 0 9px; border-color:#e2e8f0;">
+                            <i class="bi bi-search text-secondary" style="font-size:13px;"></i>
+                        </span>
+                        <input type="text" name="search"
+                               class="form-control border-start-0"
+                               placeholder="Search patients…"
+                               th:value="${search}"
+                               style="border-radius:0 9px 9px 0; border-color:#e2e8f0; font-size:13px;">
+                    </div>
+                    <button type="submit" class="btn primary-btn"
+                            style="border-radius:9px; white-space:nowrap; font-size:13px; padding:8px 16px;">
                         Search
                     </button>
-
-                </div>
-
-            </form>
-                </div>
+                </form>
 
             </div>
 
@@ -508,14 +493,10 @@
                         <td>
 
                                     <a
-                                        th:href="@{
-                                            /users/{id}
-                                            (id=${user.id})
-                                        }"
-                                        class="btn btn-sm
-                                               btn-primary"
+                                        th:href="@{/patients/{id}(id=${user.id})}"
+                                        class="btn btn-sm btn-primary"
                                     >
-                                        View
+                                        <i class="bi bi-eye me-1"></i> View
                                     </a>
 
                                 </td>
