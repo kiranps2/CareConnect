@@ -25,4 +25,5 @@ public class DoctorReport {
 
         return totalBookings;
     }
+    
 }

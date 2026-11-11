@@ -5,11 +5,16 @@ import com.example.careconnect.entity.Doctor;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
+import java.util.Optional;
 import java.util.List;
 
 public interface DoctorRepository
         extends JpaRepository<Doctor, Long> {
+                List<Doctor> findByIsActiveTrue();
+
+    Optional<Doctor> findByIdAndIsActiveTrue(
+            Long id
+    );
                  @Query("""
         SELECT new com.example.careconnect.dto.DoctorReport(
             d,

@@ -41,5 +41,15 @@ public class DoctorService {
         return doctorRepository
             .getPopularDoctors();
     }
-    
+    public List<Doctor> getActiveDoctors() {
+
+    return doctorRepository
+            .findByIsActiveTrue();
+    }
+    public Optional<Doctor> getActiveDoctorById(
+            Long id) {
+
+        return doctorRepository
+                .findByIdAndIsActiveTrue(id);
+    }
 }
