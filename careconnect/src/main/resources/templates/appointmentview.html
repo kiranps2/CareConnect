@@ -1,0 +1,583 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareConnect | Appointment Details</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Sidebar CSS -->
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-light: #e6f7f5;
+            --dark: #172b4d;
+            --muted: #8492a6;
+            --sidebar-width: 250px;
+            --bg: #f5f8fc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--dark);
+        }
+
+        /* Main Content */
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        /* Topbar */
+
+        .topbar {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #edf0f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            background: #f5f8fc;
+            border-radius: 9px;
+            padding: 10px 14px;
+            width: 280px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 85%;
+            font-size: 12px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #d8f3ee;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .admin-profile h6 {
+            font-size: 13px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .admin-profile small {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* Page */
+
+        .page-content {
+            padding: 30px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Buttons */
+
+        .btn-primary-custom {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary-custom:hover {
+            background: #0f766e;
+            color: white;
+        }
+
+        /* Details Card */
+
+        .detail-panel {
+            background: white;
+            border: 1px solid #edf0f5;
+            border-radius: 13px;
+            padding: 25px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .panel-subtitle {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .detail-section {
+            border-bottom: 1px solid #edf0f5;
+            padding: 22px 0;
+        }
+
+        .detail-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-heading {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 22px;
+        }
+
+        .detail-item {
+            margin-bottom: 20px;
+        }
+
+        .detail-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .detail-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        /* Status */
+
+        .status-badge {
+            display: inline-block;
+            padding: 7px 13px;
+            border-radius: 20px;
+            background: #e6f7ee;
+            color: #15803d;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* Footer */
+
+        footer {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* Responsive */
+
+        @media (max-width: 991px) {
+            .sidebar {
+                width: 75px;
+                padding: 24px 10px;
+                left: 0;
+            }
+
+            .brand {
+                justify-content: center;
+                padding: 0;
+            }
+
+            .brand-text,
+            .nav-label,
+            .sidebar .nav-link span {
+                display: none;
+            }
+
+            .sidebar .nav-link {
+                justify-content: center;
+                padding: 13px 8px;
+                gap: 0;
+            }
+
+            .sidebar .nav-link i {
+                font-size: 20px;
+                margin: 0;
+            }
+
+            .main-content {
+                margin-left: 75px;
+            }
+
+            .page-content {
+                padding: 20px;
+            }
+
+            .topbar {
+                padding: 15px 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .search-box {
+                display: none;
+            }
+
+            .admin-profile h6,
+            .admin-profile small {
+                display: none;
+            }
+
+            .page-content {
+                padding: 15px;
+            }
+
+            .detail-panel {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/sidebar :: sidebar('appointments')}"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+
+            <div class="search-box">
+                <i class="bi bi-search text-secondary"></i>
+                <input type="text" placeholder="Appointment details...">
+            </div>
+
+            <div class="admin-profile">
+
+                <button class="btn btn-light position-relative">
+                    <i class="bi bi-bell"></i>
+                    <span class="position-absolute top-0 start-100
+                                 translate-middle badge rounded-pill bg-danger">
+                        3
+                    </span>
+                </button>
+
+                <div class="admin-avatar">AD</div>
+
+                <div>
+                    <h6>Admin User</h6>
+                    <small>Administrator</small>
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- Page Content -->
+        <section class="page-content">
+
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between
+                        align-items-center flex-wrap gap-3 mb-4">
+
+                <div>
+                    <h2 class="page-title">Appointment Details</h2>
+
+                    <p class="page-subtitle">
+                        View complete patient appointment information.
+                    </p>
+                </div>
+
+                <a th:href="@{/appointments}"
+                   class="btn-primary-custom">
+
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Back to Appointments
+
+                </a>
+
+            </div>
+
+            <!-- Appointment Details Card -->
+            <div class="detail-panel">
+
+                <!-- Card Header -->
+                <div class="d-flex justify-content-between
+                            align-items-center flex-wrap gap-3 mb-3">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="detail-icon">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+
+                        <div>
+                            <h5 class="panel-title">
+                                Appointment Information
+                            </h5>
+
+                            <p class="panel-subtitle mb-0">
+                                Complete appointment record
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <span class="status-badge"
+                          th:text="${appointment.status}">
+                    </span>
+
+                </div>
+
+                <!-- Appointment Information -->
+                <div class="detail-section">
+
+                    <h6 class="section-heading">
+                        <i class="bi bi-calendar3 me-2"></i>
+                        Appointment Information
+                    </h6>
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    Appointment ID
+                                </div>
+
+                                <div class="detail-value"
+                                     th:text="${appointment.id}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    Appointment Date
+                                </div>
+
+                                <div class="detail-value"
+                                     th:text="${#temporals.format(appointment.appointmentDate, 'dd-MM-yyyy')}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    Appointment Time
+                                </div>
+
+                                <div class="detail-value"
+                                     th:text="${#temporals.format(appointment.appointmentTime, 'hh:mm a')}">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Patient Information -->
+                <div class="detail-section">
+
+                    <h6 class="section-heading">
+                        <i class="bi bi-person me-2"></i>
+                        Patient Information
+                    </h6>
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    Patient Name
+                                </div>
+
+                                <div class="detail-value"
+                                     th:text="${appointment.patient.firstName + ' ' + appointment.patient.lastName}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    Patient Email
+                                </div>
+
+                                <div class="detail-value"
+                                     th:text="${appointment.patient.email}">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Doctor Information -->
+                <div class="detail-section">
+
+                    <h6 class="section-heading">
+                        <i class="bi bi-person-badge me-2"></i>
+                        Doctor Information
+                    </h6>
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    Doctor Name
+                                </div>
+
+                                <div class="detail-value"
+                                     th:text="${appointment.doctor.name}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    Specialization
+                                </div>
+
+                                <div class="detail-value"
+                                     th:text="${appointment.doctor.specialization}">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Record Information -->
+                <div class="detail-section">
+
+                    <h6 class="section-heading">
+                        <i class="bi bi-clock-history me-2"></i>
+                        Record Information
+                    </h6>
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    Created At
+                                </div>
+
+                                <div class="detail-value"
+                                     th:text="${#temporals.format(appointment.createdAt, 'dd-MM-yyyy hh:mm a')}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    Last Updated
+                                </div>
+
+                                <div class="detail-value"
+                                     th:text="${#temporals.format(appointment.updatedAt, 'dd-MM-yyyy hh:mm a')}">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Bottom Button -->
+                <div class="d-flex justify-content-end mt-4">
+
+                    <a th:href="@{/appointments}"
+                       class="btn-primary-custom">
+
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Back to Appointments
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="text-center mt-4 py-3">
+
+                © 2026 CareConnect | Healthcare Appointment Management
+
+            </footer>
+
+        </section>
+
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

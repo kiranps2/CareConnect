@@ -617,81 +617,63 @@
             <!-- Table -->
             <div class="table-responsive">
 
-                <table class="table" id="appointmentTable">
+               
+<table class="table" id="appointmentTable">
 
-                    <thead>
-                        <tr>
-                            <th>APPOINTMENT ID</th>
-                            <th>PATIENT</th>
-                            <th>DOCTOR</th>
-                            
-                            <th>STATUS</th>
-                            <th>ACTION</th>
-                        </tr>
-                    </thead>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>PATIENT</th>
+            <th>DOCTOR</th>
+            <th>DATE</th>
+            <th>TIME</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+        </tr>
+    </thead>
 
-                    <tbody>
-                        <tr
-                                th:each="appointment :
-                                ${appointments}"
-                            >
+    
+<tbody>
+    <tr th:each="appointment, iterStat : ${appointments}">
 
-                                <td
-                                    th:text="${appointment.appointmentTime}"
-                                >
-                                </td>
+        <!-- Appointment ID -->
+        <td th:text="${iterStat.count}"></td>
 
-                                <td
-                                    th:text="${appointment.patient.name}"
-                                >
-                                </td>
+        <!-- Patient Name -->
+        <td th:text="${appointment.patient.firstName + ' ' + appointment.patient.lastName}"></td>
 
-                                <td
-                                    th:text="${appointment.doctor.name}"
-                                >
-                                </td>
+        <!-- Doctor Name -->
+        <td th:text="${appointment.doctor.name}"></td>
 
-                                <td
-                                    th:text="${appointment.status}"
-                                >
-                                </td>
+        <!-- Appointment Date -->
+        <td th:text="${#temporals.format(appointment.appointmentDate, 'dd-MM-yyyy')}"></td>
 
-                                <td>
+        <!-- Appointment Time -->
+        <td th:text="${#temporals.format(appointment.appointmentTime, 'hh:mm a')}"></td>
 
-                                    <a
-                                        th:href="@{
-                                            /appointments/view/
-                                            {id}
-                                            (id=${appointment.id})
-                                        }"
-                                        class="btn btn-sm
-                                               btn-primary"
-                                    >
-                                        View
-                                    </a>
+        <!-- Appointment Status -->
+        <td th:text="${appointment.status}"></td>
 
-                                </td>
+        <!-- Action -->
+        <td>
+            <a th:href="@{/appointments/appointmentview/{id}(id=${appointment.id})}"
+               class="btn btn-sm btn-primary">
+                View
+            </a>
+        </td>
 
-                            </tr>
+    </tr>
 
-                            <tr
-                                th:if="${#lists.isEmpty(
-                                    appointments
-                                )}"
-                            >
+    <tr th:if="${#lists.isEmpty(appointments)}">
+        <td colspan="7" class="text-center">
+            No appointments found.
+        </td>
+    </tr>
+</tbody>
 
-                                <td
-                                    colspan="5"
-                                    class="text-center"
-                                >
-                                    No appointments available.
-                                </td>
 
-                            </tr>
+</table>
 
-                    </tbody>
-
-                </table>
 
                 <div id="noResults"
                      class="text-center py-4 text-secondary d-none">

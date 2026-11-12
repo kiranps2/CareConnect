@@ -62,7 +62,7 @@ public class AppointmentController {
 
         return "appointments";
     }
-    @GetMapping("/view/{id}")
+    @GetMapping("/appointmentview/{id}")
     public String viewAppointment(
             @PathVariable Long id,
             Model model) {
@@ -72,6 +72,6 @@ public class AppointmentController {
             appointmentService.getAppointmentById(id)
         );
 
-        return "view";
+        return "appointmentview";
     }
 }

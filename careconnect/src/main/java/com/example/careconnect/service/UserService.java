@@ -4,6 +4,7 @@ import com.example.careconnect.entity.Role;
 import com.example.careconnect.entity.User;
 import com.example.careconnect.repository.UserRepository;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +13,15 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
+
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllPatients() {
@@ -35,4 +42,24 @@ public class UserService {
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow();
     }
+    public void changePassword(
+        User user,
+        String currentPassword,
+        String newPassword) {
+
+    if (!passwordEncoder.matches(
+            currentPassword,
+            user.getPassword())) {
+
+        throw new RuntimeException(
+                "Current password is incorrect."
+        );
+    }
+
+    user.setPassword(
+            passwordEncoder.encode(newPassword)
+    );
+
+    userRepository.save(user);
+}
 }
