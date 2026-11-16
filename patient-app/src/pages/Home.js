@@ -1,24 +1,40 @@
+import {
+    Link
+} from "react-router-dom";
+
+
 function Home() {
 
     return (
 
-        <div className="jumbotron">
+        <div>
 
-            <h1 className="display-4">
-                CareConnect
-            </h1>
+            <div className="jumbotron">
 
-            <p className="lead">
-                Find doctors and manage
-                your appointments easily.
-            </p>
+                <h1 className="display-4">
+                    Hospital Booking
+                </h1>
 
-            <hr className="my-4" />
+                <p className="lead">
+                    Find doctors and manage
+                    your appointments easily.
+                </p>
 
-            <p>
-                Browse our doctors and
-                book an appointment.
-            </p>
+                <hr className="my-4" />
+
+                <p>
+                    Browse our doctors and
+                    book an appointment.
+                </p>
+
+                <Link
+                    to="/doctors"
+                    className="btn btn-primary"
+                >
+                    View Doctors
+                </Link>
+
+            </div>
 
         </div>
     );

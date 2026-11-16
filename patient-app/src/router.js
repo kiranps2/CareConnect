@@ -16,7 +16,12 @@ import Register
 import Login
     from "./pages/Login";
 
-
+import DoctorDetails
+    from "./pages/DoctorDetails";
+import Appointments
+    from "./pages/Appointments";   
+import CheckAuth
+    from "./auth/checkAuth";     
 const router =
     createBrowserRouter([
 
@@ -45,6 +50,19 @@ const router =
                 {
                     path: "login",
                     element: <Login />
+                },
+                {
+                    path: "doctors/:id",
+                    element: <DoctorDetails />
+                },
+                {
+                   path: "appointments",
+
+                    element: (
+                        <CheckAuth>
+                            <Appointments />
+                        </CheckAuth>
+                    )
                 }
 
             ]

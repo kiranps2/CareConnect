@@ -10,7 +10,8 @@ import Navigation
 
 import Footer
     from "./components/Footer";
-
+import AutoLogin
+    from "./components/AutoLogin";
 
 function App() {
 
