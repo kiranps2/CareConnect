@@ -56,6 +56,7 @@ public class SecurityConfig {
 
         http
             // Disable CSRF (REST API + form login both work without CSRF here)
+            .cors(cors -> {})
             .csrf(csrf -> csrf.disable())
 
             .authenticationProvider(authenticationProvider())
