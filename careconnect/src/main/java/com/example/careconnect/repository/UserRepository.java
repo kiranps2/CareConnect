@@ -17,6 +17,8 @@ public interface UserRepository
 
     List<User> findByRole(Role role);
 
+    List<User> findTop5ByRoleOrderByCreatedAtDesc(Role role);
+
     @Query("""
         SELECT u FROM User u
         WHERE u.role = :role

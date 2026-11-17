@@ -683,39 +683,47 @@
 
                 <div>
                     <h5 class="panel-title">
-                        Today's Appointments
+                        All Appointments
                     </h5>
 
                     <p class="panel-subtitle">
-                        Manage and monitor today's bookings
+                        View and filter all patient appointments
                     </p>
                 </div>
 
                 <div class="d-flex gap-2 flex-wrap">
 
-                    <input type="date"
-                           class="appointment-filter"
-                           id="dateFilter">
+    <!-- From Date -->
+    <input type="date"
+           class="appointment-filter"
+           id="dateFrom"
+           title="From date">
 
-                    <select class="appointment-filter"
-                            id="statusFilter">
+    <!-- To Date -->
+    <input type="date"
+           class="appointment-filter"
+           id="dateTo"
+           title="To date">
 
-                        <option value="all">All Status</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="pending">Pending</option>
-                        <option value="cancelled">Cancelled</option>
+    <!-- Status Filter -->
+    <select class="appointment-filter" id="statusFilter">
 
-                    </select>
+        <option value="all">All Status</option>
+        <option value="booked">Booked</option>
+        <option value="completed">Completed</option>
+        <option value="cancelled">Cancelled</option>
 
-                    <a th:href="@{/appointments}"
-                       class="view-all align-self-center">
+    </select>
 
-                        View All
-                        <i class="bi bi-arrow-right"></i>
+    <a th:href="@{/appointments}"
+       class="view-all align-self-center">
 
-                    </a>
+        View All
+        <i class="bi bi-arrow-right"></i>
 
-                </div>
+    </a>
+
+</div>
 
             </div>
 
@@ -740,8 +748,8 @@
                     <tbody>
 
                         <tr th:each="appointment : ${appointments}"
-                            th:attr="data-date=${appointment.appointmentDate},
-                                     data-status=${#strings.toLowerCase(appointment.status.toString())}">
+    th:attr="data-date=${appointment.appointmentDate},
+             data-status=${#strings.toLowerCase(appointment.status.toString())}">
 
                             <td th:text="'#APT' + ${appointment.id}">
                                 #APT001
@@ -774,13 +782,7 @@
                             <td>
 
                                 <span class="status"
-                                      th:classappend="${
-                                        #strings.toLowerCase(appointment.status.toString()) == 'confirmed'
-                                        ? ' status-confirmed'
-                                        : (#strings.toLowerCase(appointment.status.toString()) == 'pending'
-                                            ? ' status-pending'
-                                            : ' status-cancelled')
-                                      }"
+                                      th:classappend="${appointment.status.toString() == 'CANCELLED' ? ' status-cancelled' : ' status-confirmed'}"
                                       th:text="${appointment.status}">
                                     Pending
                                 </span>
@@ -1117,28 +1119,38 @@
 
 </div>
 
-
 <!-- ================================= -->
 <!-- DASHBOARD FILTERS -->
 <!-- ================================= -->
 
 <script>
 
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    const dateFilter = document.getElementById("dateFilter");
+    const dateFrom = document.getElementById("dateFrom");
+    const dateTo = document.getElementById("dateTo");
     const statusFilter = document.getElementById("statusFilter");
     const searchInput = document.getElementById("globalSearch");
+
     const table = document.getElementById("appointmentTable");
     const noResults = document.getElementById("noResults");
 
+    if (!table) return;
+
     function filterAppointments() {
 
-        const selectedDate = dateFilter.value;
-        const selectedStatus = statusFilter.value.toLowerCase();
-        const searchText = searchInput.value.toLowerCase();
+        const fromDate = dateFrom.value;
+        const toDate = dateTo.value;
+
+        const selectedStatus =
+            statusFilter.value.toLowerCase();
+
+        const searchText =
+            searchInput.value.toLowerCase().trim();
 
         const rows = table.querySelectorAll("tbody tr[data-date]");
+
         let visibleCount = 0;
 
         rows.forEach(function (row) {
@@ -1147,18 +1159,27 @@ document.addEventListener("DOMContentLoaded", function () {
             const rowStatus = row.dataset.status;
             const rowText = row.innerText.toLowerCase();
 
-            const dateMatches =
-                !selectedDate || rowDate === selectedDate;
+            // Date range filter
+            const matchesFromDate =
+                !fromDate || rowDate >= fromDate;
 
-            const statusMatches =
+            const matchesToDate =
+                !toDate || rowDate <= toDate;
+
+            // Status filter
+            const matchesStatus =
                 selectedStatus === "all" ||
                 rowStatus === selectedStatus;
 
-            const searchMatches =
+            // Search patient, doctor, appointment ID, etc.
+            const matchesSearch =
                 rowText.includes(searchText);
 
             const show =
-                dateMatches && statusMatches && searchMatches;
+                matchesFromDate &&
+                matchesToDate &&
+                matchesStatus &&
+                matchesSearch;
 
             row.style.display = show ? "" : "none";
 
@@ -1168,15 +1189,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-        noResults.classList.toggle("d-none", visibleCount > 0);
+        // Show message when no rows match the filters
+        if (noResults) {
+            noResults.classList.toggle(
+                "d-none",
+                visibleCount > 0
+            );
+        }
 
     }
 
-    dateFilter.addEventListener("change", filterAppointments);
+    dateFrom.addEventListener("change", filterAppointments);
+    dateTo.addEventListener("change", filterAppointments);
     statusFilter.addEventListener("change", filterAppointments);
     searchInput.addEventListener("input", filterAppointments);
 
 });
+
 
 </script>
 
@@ -1185,6 +1214,10 @@ document.addEventListener("DOMContentLoaded", function () {
 <!-- CHART.JS -->
 <!-- ================================= -->
 
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
+<!-- Dashboard Charts -->
 <script th:inline="javascript">
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -1205,11 +1238,14 @@ document.addEventListener("DOMContentLoaded", function () {
         /*[[${cancelledCount}]]*/ 0;
 
 
-    // Appointment Overview Chart
+    // =====================================
+    // APPOINTMENT OVERVIEW - BAR CHART
+    // =====================================
+
     const appointmentCanvas =
         document.getElementById("appointmentChart");
 
-    if (appointmentCanvas && typeof Chart !== "undefined") {
+    if (appointmentCanvas) {
 
         new Chart(appointmentCanvas, {
 
@@ -1245,17 +1281,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     legend: {
                         display: false
+                    },
+
+                    tooltip: {
+                        enabled: true
                     }
 
                 },
 
                 scales: {
 
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+
                     y: {
+
                         beginAtZero: true,
+
                         ticks: {
                             precision: 0
                         }
+
                     }
 
                 }
@@ -1267,11 +1316,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // Appointment Status Chart
+    // =====================================
+    // APPOINTMENT STATUS - DOUGHNUT CHART
+    // =====================================
+
     const statusCanvas =
         document.getElementById("statusChart");
 
-    if (statusCanvas && typeof Chart !== "undefined") {
+    if (statusCanvas) {
 
         new Chart(statusCanvas, {
 
@@ -1299,7 +1351,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         "#ef4444"
                     ],
 
-                    borderWidth: 0
+                    borderWidth: 0,
+
+                    hoverOffset: 5
 
                 }]
 
@@ -1330,6 +1384,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
+
 
 
 </body>
