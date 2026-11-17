@@ -16,6 +16,8 @@ import AutoLogin
 function App() {
 
     return (
+        <>
+        <AutoLogin/>
 
         <div className="d-flex flex-column min-vh-100">
 
@@ -32,6 +34,7 @@ function App() {
             <Footer />
 
         </div>
+    </>    
     );
 }
 

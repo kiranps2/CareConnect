@@ -21,7 +21,9 @@ import DoctorDetails
 import Appointments
     from "./pages/Appointments";   
 import CheckAuth
-    from "./auth/checkAuth";     
+    from "./auth/checkAuth";  
+import BookAppointment
+    from "./pages/BookAppointment";       
 const router =
     createBrowserRouter([
 
@@ -61,6 +63,15 @@ const router =
                     element: (
                         <CheckAuth>
                             <Appointments />
+                        </CheckAuth>
+                    )
+                },
+                {
+                    path: "appointments/book",
+
+                    element: (
+                        <CheckAuth>
+                            <BookAppointment />
                         </CheckAuth>
                     )
                 }
