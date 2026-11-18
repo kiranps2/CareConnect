@@ -24,6 +24,8 @@ import CheckAuth
     from "./auth/checkAuth";  
 import BookAppointment
     from "./pages/BookAppointment";       
+import ChangePassword
+    from "./pages/ChangePassword";    
 const router =
     createBrowserRouter([
 
@@ -74,7 +76,16 @@ const router =
                             <BookAppointment />
                         </CheckAuth>
                     )
-                }
+                },
+                {
+                    path: "change-password",
+
+                    element: (
+                        <CheckAuth>
+                            <ChangePassword />
+                        </CheckAuth>
+                    )
+                },
 
             ]
         }
