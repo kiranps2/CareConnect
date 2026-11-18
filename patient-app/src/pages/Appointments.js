@@ -423,7 +423,7 @@ function Appointments() {
                                 </p>
 
                                 <Link
-                                    to="/book-appointment"
+                                    to="/appointments/book"
                                     className="empty-book-btn"
                                 >
                                     <i className="bi bi-plus-lg"></i>
