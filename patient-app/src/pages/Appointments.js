@@ -4,38 +4,57 @@ import { Link } from "react-router-dom";
 import api from "../api/axios";
 
 function Appointments() {
-
     const [appointments, setAppointments] = useState([]);
+    const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [cancellingId, setCancellingId] = useState(null);
 
     // Get today's date in local YYYY-MM-DD format
-    const date = new Date();
+    const getToday = () => {
+        const date = new Date();
 
-    const today = [
-        date.getFullYear(),
-        String(date.getMonth() + 1).padStart(2, "0"),
-        String(date.getDate()).padStart(2, "0")
-    ].join("-");
+        return [
+            date.getFullYear(),
+            String(date.getMonth() + 1).padStart(2, "0"),
+            String(date.getDate()).padStart(2, "0")
+        ].join("-");
+    };
 
-    // Load appointments
+    const today = getToday();
+
+    // Load appointments and doctors
     const loadAppointments = async () => {
-
         try {
             setError("");
 
-            const response = await api.get("/appointments");
+            const [appointmentResponse, doctorResponse] =
+                await Promise.all([
+                    api.get("/appointments"),
+                    api.get("/doctors")
+                ]);
 
-            setAppointments(response.data);
+            const appointmentData = Array.isArray(appointmentResponse.data)
+                ? appointmentResponse.data
+                : [];
 
-        } catch (error) {
+            const doctorData = Array.isArray(doctorResponse.data)
+                ? doctorResponse.data
+                : [];
+
+            console.log("Appointments:", appointmentData);
+            console.log("Doctors:", doctorData);
+
+            setAppointments(appointmentData);
+            setDoctors(doctorData);
+
+        } catch (err) {
+            console.error("Loading appointments failed:", err);
 
             setError(
-                error.response?.data?.message ||
+                err.response?.data?.message ||
                 "Unable to load appointments. Please try again."
             );
-
         } finally {
             setLoading(false);
         }
@@ -45,11 +64,38 @@ function Appointments() {
         loadAppointments();
     }, []);
 
-    // Separate upcoming and past appointments
+    // Find the doctor associated with an appointment
+    const getDoctor = (appointment) => {
+        // First, check whether the API already returns a doctor object
+        const directDoctor =
+            appointment.doctor ||
+            appointment.doctorDetails ||
+            appointment.doctorResponse;
+
+        if (directDoctor && typeof directDoctor === "object") {
+            // Handle a nested doctor object too
+            return directDoctor.doctor || directDoctor;
+        }
+
+        // Find the doctor using the doctor's ID
+        const doctorId =
+            appointment.doctorId ??
+            appointment.doctor_id ??
+            appointment.doctor?.id ??
+            appointment.doctor?.doctorId;
+
+        if (doctorId !== undefined && doctorId !== null) {
+            return doctors.find(
+                doctor => String(doctor.id) === String(doctorId)
+            ) || null;
+        }
+
+        return null;
+    };
+
+    // Separate upcoming appointments
     const upcomingAppointments = appointments
-        .filter(appointment =>
-            appointment.appointmentDate >= today
-        )
+        .filter(appointment => appointment.appointmentDate >= today)
         .sort((a, b) =>
             `${a.appointmentDate}T${a.appointmentTime}`
                 .localeCompare(
@@ -57,10 +103,9 @@ function Appointments() {
                 )
         );
 
+    // Separate past appointments
     const pastAppointments = appointments
-        .filter(appointment =>
-            appointment.appointmentDate < today
-        )
+        .filter(appointment => appointment.appointmentDate < today)
         .sort((a, b) =>
             `${b.appointmentDate}T${b.appointmentTime}`
                 .localeCompare(
@@ -70,7 +115,6 @@ function Appointments() {
 
     // Format date
     const formatDate = (dateString) => {
-
         if (!dateString) return "Date unavailable";
 
         const [year, month, day] = dateString.split("-").map(Number);
@@ -87,13 +131,11 @@ function Appointments() {
 
     // Format time
     const formatTime = (timeString) => {
-
         if (!timeString) return "Time unavailable";
 
         const [hours, minutes] = timeString.split(":");
 
         const time = new Date();
-
         time.setHours(Number(hours), Number(minutes), 0, 0);
 
         return time.toLocaleTimeString("en-IN", {
@@ -103,20 +145,15 @@ function Appointments() {
         });
     };
 
-    // Get status styling
+    // Status styling
     const getStatusClass = (status) => {
-
         switch (status?.toUpperCase()) {
-
             case "BOOKED":
                 return "status-booked";
-
             case "CANCELLED":
                 return "status-cancelled";
-
             case "COMPLETED":
                 return "status-completed";
-
             default:
                 return "status-default";
         }
@@ -124,7 +161,6 @@ function Appointments() {
 
     // Cancel appointment
     const handleCancel = async (id) => {
-
         const confirmed = window.confirm(
             "Are you sure you want to cancel this appointment?"
         );
@@ -132,7 +168,6 @@ function Appointments() {
         if (!confirmed) return;
 
         try {
-
             setCancellingId(id);
             setError("");
 
@@ -140,133 +175,127 @@ function Appointments() {
 
             await loadAppointments();
 
-        } catch (error) {
-
+        } catch (err) {
             setError(
-                error.response?.data?.message ||
+                err.response?.data?.message ||
                 "Unable to cancel appointment. Please try again."
             );
-
         } finally {
-
             setCancellingId(null);
         }
     };
 
     // Appointment card
-    const AppointmentCard = ({ appointment, isPast = false }) => (
+    const AppointmentCard = ({ appointment, isPast = false }) => {
+        const doctor = getDoctor(appointment);
 
-        <div className="appointment-card">
+        return (
+            <div className="appointment-card">
 
-            <div className="appointment-card-top">
+                <div className="appointment-card-top">
 
-                <div className="doctor-details">
+                    <div className="doctor-details">
 
-                    <div className="doctor-avatar">
-                        <i className="bi bi-person-fill"></i>
+                        <div className="doctor-avatar">
+                            <i className="bi bi-person-fill"></i>
+                        </div>
+
+                        <div>
+                            <h5>
+                                {doctor?.name || "Doctor name unavailable"}
+                            </h5>
+
+                            <p>
+                                {doctor?.specialization ||
+                                    "Specialization unavailable"}
+                            </p>
+                        </div>
+
                     </div>
 
-                    <div>
-                         <h5>
-            {appointment.doctor?.name ||
-             appointment.doctor?.doctor?.name ||
-             "Doctor name unavailable"}
-        </h5>
+                    <span className={`appointment-status ${getStatusClass(appointment.status)}`}>
+                        <span className="status-dot"></span>
+                        {appointment.status || "Unknown"}
+                    </span>
 
-        <p>
-            {appointment.doctor?.specialization ||
-             appointment.doctor?.doctor?.specialization ||
-             "Specialization unavailable"}
-        </p>
+                </div>
+
+                <div className="appointment-details">
+
+                    <div className="appointment-detail-item">
+                        <div className="detail-icon">
+                            <i className="bi bi-calendar3"></i>
+                        </div>
+
+                        <div>
+                            <small>Appointment Date</small>
+                            <strong>
+                                {formatDate(appointment.appointmentDate)}
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div className="appointment-detail-item">
+                        <div className="detail-icon">
+                            <i className="bi bi-clock"></i>
+                        </div>
+
+                        <div>
+                            <small>Appointment Time</small>
+                            <strong>
+                                {formatTime(appointment.appointmentTime)}
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div className="appointment-detail-item">
+                        <div className="detail-icon">
+                            <i className="bi bi-hospital"></i>
+                        </div>
+
+                        <div>
+                            <small>Specialization</small>
+                            <strong>
+                                {doctor?.specialization || "Not specified"}
+                            </strong>
+                        </div>
                     </div>
 
                 </div>
 
-                <span className={`appointment-status ${getStatusClass(appointment.status)}`}>
-                    <span className="status-dot"></span>
-                    {appointment.status || "Unknown"}
-                </span>
+                <div className="appointment-card-footer">
+
+                    <span className="appointment-id">
+                        Appointment ID: #{appointment.id}
+                    </span>
+
+                    {!isPast && appointment.status?.toUpperCase() === "BOOKED" && (
+                        <button
+                            className="cancel-appointment-btn"
+                            onClick={() => handleCancel(appointment.id)}
+                            disabled={cancellingId === appointment.id}
+                        >
+                            {cancellingId === appointment.id ? (
+                                <>
+                                    <span className="spinner-border spinner-border-sm"></span>
+                                    Cancelling...
+                                </>
+                            ) : (
+                                <>
+                                    <i className="bi bi-x-circle"></i>
+                                    Cancel Appointment
+                                </>
+                            )}
+                        </button>
+                    )}
+
+                </div>
 
             </div>
-
-            <div className="appointment-details">
-
-                <div className="appointment-detail-item">
-                    <div className="detail-icon">
-                        <i className="bi bi-calendar3"></i>
-                    </div>
-
-                    <div>
-                        <small>Appointment Date</small>
-                        <strong>
-                            {formatDate(appointment.appointmentDate)}
-                        </strong>
-                    </div>
-                </div>
-
-                <div className="appointment-detail-item">
-                    <div className="detail-icon">
-                        <i className="bi bi-clock"></i>
-                    </div>
-
-                    <div>
-                        <small>Appointment Time</small>
-                        <strong>
-                            {formatTime(appointment.appointmentTime)}
-                        </strong>
-                    </div>
-                </div>
-
-                <div className="appointment-detail-item">
-                    <div className="detail-icon">
-                        <i className="bi bi-hospital"></i>
-                    </div>
-
-                    <div>
-                        <small>Specialization</small>
-                        <strong>
-                            {appointment.doctor?.specialization || "Not specified"}
-                        </strong>
-                    </div>
-                </div>
-
-            </div>
-
-            <div className="appointment-card-footer">
-
-                <span className="appointment-id">
-                    Appointment ID: #{appointment.id}
-                </span>
-
-                {!isPast && appointment.status === "BOOKED" && (
-
-                    <button
-                        className="cancel-appointment-btn"
-                        onClick={() => handleCancel(appointment.id)}
-                        disabled={cancellingId === appointment.id}
-                    >
-                        {cancellingId === appointment.id ? (
-                            <>
-                                <span className="spinner-border spinner-border-sm"></span>
-                                Cancelling...
-                            </>
-                        ) : (
-                            <>
-                                <i className="bi bi-x-circle"></i>
-                                Cancel Appointment
-                            </>
-                        )}
-                    </button>
-
-                )}
-
-            </div>
-
-        </div>
-    );
+        );
+    };
 
     return (
-
         <div className="appointments-page">
 
             {/* Header */}
@@ -287,7 +316,7 @@ function Appointments() {
                 </div>
 
                 <Link
-                    to="/book-appointment"
+                    to="/appointments/book"
                     className="new-appointment-btn"
                 >
                     <i className="bi bi-plus-lg"></i>
@@ -296,21 +325,16 @@ function Appointments() {
 
             </div>
 
-            {/* Error Message */}
+            {/* Error */}
             {error && (
-
                 <div className="appointments-error">
                     <i className="bi bi-exclamation-circle-fill"></i>
                     <span>{error}</span>
 
-                    <button
-                        onClick={loadAppointments}
-                        type="button"
-                    >
+                    <button onClick={loadAppointments} type="button">
                         Retry
                     </button>
                 </div>
-
             )}
 
             {/* Statistics */}
@@ -361,7 +385,6 @@ function Appointments() {
             ) : (
 
                 <>
-
                     {/* Upcoming Appointments */}
                     <section className="appointment-section">
 
@@ -412,12 +435,10 @@ function Appointments() {
                         ) : (
 
                             upcomingAppointments.map(appointment => (
-
                                 <AppointmentCard
                                     key={appointment.id}
                                     appointment={appointment}
                                 />
-
                             ))
 
                         )}
@@ -465,21 +486,17 @@ function Appointments() {
                         ) : (
 
                             pastAppointments.map(appointment => (
-
                                 <AppointmentCard
                                     key={appointment.id}
                                     appointment={appointment}
                                     isPast={true}
                                 />
-
                             ))
 
                         )}
 
                     </section>
-
                 </>
-
             )}
 
             <style>{`
@@ -542,7 +559,8 @@ function Appointments() {
                     white-space: nowrap;
                 }
 
-                .new-appointment-btn:hover {
+                .new-appointment-btn:hover,
+                .empty-book-btn:hover {
                     background: #0a7a70;
                     color: white;
                     transform: translateY(-2px);
@@ -907,11 +925,6 @@ function Appointments() {
                     font-size: 12px;
                     font-weight: 700;
                     text-decoration: none;
-                }
-
-                .empty-book-btn:hover {
-                    background: #0a7a70;
-                    color: white;
                 }
 
                 .small-empty {

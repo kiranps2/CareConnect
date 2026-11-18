@@ -39,10 +39,10 @@
     <div class="nav-label">Account</div>
 
     <nav>
-        <a class="nav-link" th:href="@{/settings}" th:classappend="${activePage == 'settings'} ? ' active' : ''">
+        <!-- <a class="nav-link" th:href="@{/settings}" th:classappend="${activePage == 'settings'} ? ' active' : ''">
             <i class="bi bi-gear"></i>
             <span>Settings</span>
-        </a>
+        </a> -->
 
         <form th:action="@{/logout}" method="post" class="logout-form">
 
