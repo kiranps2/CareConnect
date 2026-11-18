@@ -76,61 +76,7 @@ function ChangePassword() {
         }
     };
 
-    const PasswordInput = ({
-        id,
-        label,
-        value,
-        setValue,
-        visible,
-        setVisible,
-        placeholder
-    }) => (
-
-        <div className="password-field">
-
-            <label htmlFor={id}>
-                {label}
-                <span>*</span>
-            </label>
-
-            <div className="password-input-wrapper">
-
-                <i className="bi bi-lock password-field-icon"></i>
-
-                <input
-                    type={visible ? "text" : "password"}
-                    id={id}
-                    value={value}
-                    onChange={(event) => {
-                        setValue(event.target.value);
-                        setError("");
-                        setMessage("");
-                    }}
-                    placeholder={placeholder}
-                    autoComplete={
-                        id === "currentPassword"
-                            ? "current-password"
-                            : "new-password"
-                    }
-                    required
-                    minLength={id === "currentPassword" ? undefined : 8}
-                />
-
-                <button
-                    type="button"
-                    className="password-visibility-btn"
-                    onClick={() => setVisible(!visible)}
-                    aria-label={visible ? "Hide password" : "Show password"}
-                >
-                    <i className={
-                        visible ? "bi bi-eye-slash" : "bi bi-eye"
-                    }></i>
-                </button>
-
-            </div>
-
-        </div>
-    );
+    
 
     return (
 
@@ -211,6 +157,10 @@ function ChangePassword() {
                                 visible={showCurrent}
                                 setVisible={setShowCurrent}
                                 placeholder="Enter your current password"
+                                onInputChange={() => {
+                                    setError("");
+                                    setMessage("");
+                                }}
                             />
 
                             <div className="password-form-divider"></div>
@@ -223,6 +173,10 @@ function ChangePassword() {
                                 visible={showNew}
                                 setVisible={setShowNew}
                                 placeholder="Enter your new password"
+                                onInputChange={() => {
+                                    setError("");
+                                    setMessage("");
+                                }}
                             />
 
                             <PasswordInput
@@ -233,6 +187,10 @@ function ChangePassword() {
                                 visible={showConfirm}
                                 setVisible={setShowConfirm}
                                 placeholder="Re-enter your new password"
+                                onInputChange={() => {
+                                    setError("");
+                                    setMessage("");
+                                }}
                             />
 
                             <div className="password-hint">
@@ -767,5 +725,59 @@ function ChangePassword() {
         </div>
     );
 }
+const PasswordInput = ({
+    id,
+    label,
+    value,
+    setValue,
+    visible,
+    setVisible,
+    placeholder,
+    onInputChange
+}) => (
 
+    <div className="password-field">
+
+        <label htmlFor={id}>
+            {label}
+            <span>*</span>
+        </label>
+
+        <div className="password-input-wrapper">
+
+            <i className="bi bi-lock password-field-icon"></i>
+
+            <input
+                type={visible ? "text" : "password"}
+                id={id}
+                value={value}
+                onChange={(event) => {
+                    setValue(event.target.value);
+                    onInputChange();
+                }}
+                placeholder={placeholder}
+                autoComplete={
+                    id === "currentPassword"
+                        ? "current-password"
+                        : "new-password"
+                }
+                required
+                minLength={id === "currentPassword" ? undefined : 8}
+            />
+
+            <button
+                type="button"
+                className="password-visibility-btn"
+                onClick={() => setVisible(!visible)}
+                aria-label={visible ? "Hide password" : "Show password"}
+            >
+                <i className={
+                    visible ? "bi bi-eye-slash" : "bi bi-eye"
+                }></i>
+            </button>
+
+        </div>
+
+    </div>
+);
 export default ChangePassword;
